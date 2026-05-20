@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alma Fungi – Hongo Vital</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    /* ── Paleta oficial Alma Fungi ── */
+    --cream:   #F2E8DC;   /* #F2E8DC – crema más claro */
+    --cream2:  #E8DED1;   /* #E8DED1 – crema medio */
+    --beige:   #C7B299;   /* #C7B299 – arena/beige */
+    --brown-l: #C7B299;   /* alias beige para bordes suaves */
+    --brown:   #8A6F55;   /* #8A6F55 – marrón medio */
+    --brown-d: #5D4A3A;   /* #5D4A3A – marrón oscuro principal */
+    --muted:   #9A8575;   /* derivado de la paleta */
+    --dark:    #3A2A1E;   /* texto muy oscuro */
+    --white:   #FAF6F1;   /* blanco cálido */
+
+    /* ── Colores funcionales (badges, alertas) ── */
+    --green:   #5C6B4E;
+    --green-l: #7A8F6B;
+    --rust:    #A0522D;
+    --gold:    #C7B299;   /* dorado = beige medio */
+    --purple:  #6B4E8A;
+    --teal:    #3A7A72;
+
+    --radius:    10px;
+    --radius-lg: 18px;
+    --shadow:    0 4px 20px rgba(58,42,30,.10);
+    --shadow-lg: 0 12px 40px rgba(58,42,30,.18);
+  }
+
+  body {
+    font-family: 'Montserrat', 'Lato', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    background: var(--brown-d);
+    color: var(--cream);
+    font-size: 12px;
+    text-align: center;
+    padding: 7px;
+    letter-spacing: .6px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+  }
+  .topbar span { color: var(--beige); font-weight: 700; }
+
+  /* HEADER */
+  header {
+    background: rgba(242,232,220,.95);
+    border-bottom: 2px solid var(--beige);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 14px 24px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    flex-shrink: 0;
+    gap: 12px;
+  }
+
+  .logo-img {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--beige);
+    box-shadow: 0 6px 18px rgba(0,0,0,.12);
+    background: #fff;
+  }
+
+  .logo-right {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .logo-text {
+    font-family: 'Cinzel', 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--brown-d);
+    letter-spacing: 4px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .logo-sub {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .search-bar { flex: 1; display: flex; }
+  .search-bar input {
+    flex: 1;
+    border: 2px solid var(--beige);
+    border-right: none;
+    border-radius: var(--radius) 0 0 var(--radius);
+    padding: 10px 16px;
+    font-size: 14px;
+    font-family: 'Montserrat', 'Lato', sans-serif;
+    outline: none;
+    background: rgba(245,239,230,.75);
+    color: var(--dark);
+  }
+  .search-bar input:focus { border-color: var(--brown-l); background: var(--white); }
+  .search-btn {
+    background: var(--brown-d);
+    border: 2px solid var(--brown-d);
+    color: var(--cream);
+    font-weight: 700;
+    font-size: 13px;
+    padding: 10px 20px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    cursor: pointer;
+  }
+  .search-btn:hover { background: var(--brown); }
+
+  .header-actions { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+  .btn-cart {
+    background: var(--brown-d);
+    border: none;
+    color: var(--cream);
+    font-weight: 700;
+    font-size: 14px;
+    padding: 10px 18px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    position: relative;
+    transition: background .2s;
+  }
+  .btn-cart:hover { background: var(--brown); }
+  .cart-badge {
+    background: var(--rust);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    border-radius: 50%;
+    width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center;
+    position: absolute; top: -6px; right: -6px;
+  }
+  .btn-login {
+    background: transparent;
+    border: 1.5px solid var(--beige);
+    color: var(--brown-d);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 9px 16px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-family: 'Montserrat', 'Lato', sans-serif;
+  }
+  .btn-login:hover { border-color: var(--brown-d); }
+
+  /* NAV */
+  nav { background: var(--brown-d); }
+  .nav-inner {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    overflow-x: auto;
+  }
+  .nav-inner a {
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 12px 16px;
+    white-space: nowrap;
+    display: block;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    border-bottom: 2px solid transparent;
+    transition: color .15s, border-color .15s;
+  }
+  .nav-inner a:hover, .nav-inner a.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, rgba(92,61,30,.92), rgba(42,31,20,.96)),
+      url("fungi.jpg") center/cover no-repeat;
+    overflow: hidden;
+    position: relative;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(42,31,20,.55), rgba(42,31,20,.80));
+  }
+
+  .hero-inner {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    min-height: 420px;
+    padding: 60px 24px;
+    gap: 40px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-text { flex: 1; }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(184,145,58,.95);
+    color: var(--dark);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    font-family: 'Cinzel', 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.08;
+    margin-bottom: 14px;
+    letter-spacing: 2px;
+    text-shadow: 0 12px 30px rgba(0,0,0,.35);
+  }
+  .hero h1 em { color: #E8DED1; font-style: italic; font-family: 'Playfair Display', serif; }
+
+  .hero p {
+    color: #d4c6b7;
+    font-size: 16px;
+    margin-bottom: 26px;
+    max-width: 440px;
+    line-height: 1.7;
+  }
+
+  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--dark);
+    border: none;
+    font-weight: 800;
+    font-size: 14px;
+    padding: 13px 28px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-family: 'Montserrat', 'Lato', sans-serif;
+    letter-spacing: .5px;
+    transition: background .2s, transform .15s;
+    box-shadow: 0 10px 26px rgba(0,0,0,.25);
+  }
+  .btn-primary:hover { background: var(--brown-l); transform: translateY(-1px); }
+
+  .btn-outline {
+    background: rgba(255,255,255,.06);
+    color: var(--cream);
+    border: 2px solid rgba(255,255,255,.25);
+    font-weight: 700;
+    font-size: 14px;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-family: 'Montserrat', 'Lato', sans-serif;
+    backdrop-filter: blur(6px);
+  }
+  .btn-outline:hover { border-color: var(--cream); }
+
+  .hero-stats { display: flex; gap: 28px; margin-top: 34px; }
+  .hero-stat strong {
+    font-family: 'Cinzel', 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--gold);
+    display: block;
+  }
+  .hero-stat span { font-size: 12px; color: #bba996; letter-spacing: .5px; }
+
+  .hero-visual {
+    flex-shrink: 0;
+    width: 320px;
+    background: rgba(253,250,246,.06);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 22px;
+    padding: 18px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 60px rgba(0,0,0,.35);
+  }
+
+  .hero-visual img {
+    width: 100%;
+    border-radius: 16px;
+    object-fit: cover;
+    border: 1px solid rgba(255,255,255,.12);
+  }
+
+  .hero-visual .mini-text {
+    margin-top: 12px;
+    color: #d7cbbb;
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  /* PROMO STRIP */
+  .promo-strip { background: var(--gold); padding: 8px 0; overflow: hidden; }
+  .promo-track {
+    display: flex;
+    gap: 48px;
+    white-space: nowrap;
+    font-weight: 800;
+    font-size: 12px;
+    color: var(--dark);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    animation: marquee 22s linear infinite;
+  }
+  .promo-track span::before { content: '✦ '; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* CATEGORIES */
+  .section { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+  .section-title {
+    font-family: 'Cinzel', 'Playfair Display', serif;
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--brown-d);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .section-divider {
+    width: 48px; height: 3px;
+    background: var(--gold);
+    border-radius: 2px;
+    margin: 8px 0 6px;
+  }
+  .section-sub { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+
+  .cats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 14px; }
+  .cat-card {
+    background: var(--white);
+    border: 1.5px solid var(--beige);
+    border-radius: var(--radius-lg);
+    padding: 22px 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s, box-shadow .2s, transform .2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, rgba(184,145,58,.10), transparent 60%);
+    opacity: 0;
+    transition: opacity .2s;
+  }
+  .cat-card:hover::before { opacity: 1; }
+
+  .cat-card:hover {
+    border-color: var(--brown-l);
+    box-shadow: 0 12px 30px rgba(139,94,60,.15);
+    transform: translateY(-2px);
+  }
+  .cat-icon { font-size: 32px; margin-bottom: 8px; display: block; }
+  .cat-name { font-size: 13px; font-weight: 800; color: var(--brown-d); letter-spacing: .3px; }
+  .cat-benefit { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  /* PRODUCTS */
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 18px; }
+
+  .prod-card {
+    background: var(--white);
+    border: 1.5px solid var(--beige);
+    border-radius: 22px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow .2s, transform .2s, border-color .2s;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .prod-card:hover {
+    box-shadow: 0 18px 55px rgba(90,50,20,.18);
+    transform: translateY(-4px);
+    border-color: var(--brown-l);
+  }
+
+  .prod-img {
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 18px;
+    background: linear-gradient(180deg, rgba(245,239,230,.9), rgba(237,229,216,.9));
+  }
+
+  .prod-img::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top, rgba(184,145,58,.18), transparent 65%);
+  }
+
+  .prod-real-bag {
+    width: 170px;
+    max-width: 90%;
+    height: 170px;
+    object-fit: contain;
+    z-index: 2;
+    filter: drop-shadow(0 18px 26px rgba(0,0,0,.25));
+    transition: transform .2s;
+  }
+
+  .prod-card:hover .prod-real-bag {
+    transform: translateY(-2px) scale(1.03);
+  }
+
+  .badge-oferta {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--rust); color: #fff;
+    font-size: 10px; font-weight: 900;
+    padding: 4px 10px; border-radius: 6px;
+    z-index: 5;
+  }
+  .badge-nuevo {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--teal); color: #fff;
+    font-size: 10px; font-weight: 900;
+    padding: 4px 10px; border-radius: 6px;
+    z-index: 5;
+  }
+  .badge-natural {
+    position: absolute; top: 12px; right: 12px;
+    background: var(--green); color: #fff;
+    font-size: 9px; font-weight: 800;
+    padding: 4px 10px; border-radius: 6px;
+    z-index: 5;
+  }
+
+  .prod-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+  .prod-brand {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .prod-name {
+    font-family: 'Cinzel', 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--brown-d);
+    margin-bottom: 4px;
+    line-height: 1.25;
+    letter-spacing: .5px;
+  }
+  .prod-benefit {
+    font-size: 12px;
+    color: var(--brown);
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-family: 'Lato', sans-serif;
+  }
+
+  .prod-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+
+  .prod-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .prod-tag {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--brown-d);
+    background: rgba(217,201,176,.45);
+    border-radius: 20px;
+    padding: 4px 10px;
+    letter-spacing: .3px;
+    border: 1px solid rgba(217,201,176,.65);
+  }
+
+  .stars { color: var(--gold); font-size: 12px; margin-bottom: 10px; }
+  .stars span { color: var(--muted); font-size: 11px; margin-left: 4px; }
+
+  .prod-price { margin-top: auto; }
+  .prod-price-old { font-size: 12px; color: var(--muted); text-decoration: line-through; }
+  .prod-price-main {
+    font-family: 'Cinzel', 'Playfair Display', serif;
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--brown-d);
+    line-height: 1;
+  }
+  .prod-price-main small { font-size: 15px; font-weight: 700; font-family: 'Montserrat', 'Lato', sans-serif; }
+
+  .prod-cuotas {
+    font-size: 11px;
+    color: var(--green-l);
+    font-weight: 700;
+    margin-top: 4px;
+  }
+
+  .btn-add {
+    margin-top: 14px;
+    width: 100%;
+    background: var(--brown-d);
+    border: none;
+    color: var(--cream);
+    font-weight: 800;
+    font-size: 13px;
+    padding: 12px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-family: 'Montserrat', 'Lato', sans-serif;
+    letter-spacing: .5px;
+    transition: background .2s, transform .15s;
+    box-shadow: 0 10px 20px rgba(0,0,0,.10);
+  }
+  .btn-add:hover { background: var(--brown); transform: translateY(-1px); }
+  .btn-add:active { transform: scale(.98); }
+
+  /* TRUST BAR */
+  .trust-bar {
+    background: var(--white);
+    border-top: 1.5px solid var(--beige);
+    border-bottom: 1.5px solid var(--beige);
+  }
+  .trust-inner {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 22px;
+    border-right: 1.5px solid var(--beige);
+  }
+  .trust-item:last-child { border-right: none; }
+  .trust-icon { font-size: 26px; flex-shrink: 0; }
+  .trust-label { font-size: 13px; font-weight: 800; color: var(--brown-d); }
+  .trust-sub { font-size: 11px; color: var(--muted); }
+
+  /* FEATURED BANNER */
+  .featured-banner {
+    background: linear-gradient(135deg, rgba(92,61,30,.96), rgba(42,31,20,.96)),
+      url("descripcion.jpg") center/cover no-repeat;
+    border-radius: 22px;
+    padding: 42px 46px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 18px 55px rgba(0,0,0,.20);
+  }
+
+  .featured-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(42,31,20,.55), rgba(42,31,20,.88));
+  }
+
+  .featured-banner > div { position: relative; z-index: 2; }
+
+  .featured-banner h2 {
+    font-family: 'Cinzel', 'Playfair Display', serif;
+    font-size: 44px;
+    font-weight: 900;
+    color: var(--cream);
+    line-height: 1;
+    text-shadow: 0 12px 28px rgba(0,0,0,.35);
+  }
+  .featured-banner h2 em { color: var(--gold); font-style: italic; }
+  .featured-banner p { color: #d4c6b7; font-size: 14px; margin: 10px 0 20px; line-height: 1.7; max-width: 480px; }
+
+  .discount-pill {
+    display: inline-block;
+    background: var(--rust);
+    color: #fff;
+    font-family: 'Cinzel', 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 900;
+    padding: 10px 24px;
+    border-radius: 14px;
+    line-height: 1;
+    box-shadow: 0 12px 28px rgba(0,0,0,.22);
+  }
+
+  /* FOOTER */
+  footer { background: var(--dark); color: #a0907e; padding: 44px 24px 24px; margin-top: 24px; }
+  .footer-inner { max-width: 1200px; margin: auto; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 36px; margin-bottom: 32px; }
+  .footer h3 { font-family: 'Cinzel', 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--cream); margin-bottom: 14px; letter-spacing: .5px; }
+  .footer p { font-size: 13px; line-height: 1.8; }
+  .footer ul { list-style: none; }
+  .footer ul li { font-size: 13px; margin-bottom: 8px; cursor: pointer; transition: color .15s; }
+  .footer ul li:hover { color: var(--cream); }
+  .footer-bottom {
+    border-top: 1px solid #3a2e22;
+    padding-top: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-logo {
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+  .footer-logo .accent { color: var(--beige); }
+  .footer-sub-logo { font-size: 9px; letter-spacing: 4px; color: var(--muted); text-transform: uppercase; margin-top: -4px; margin-bottom: 12px; font-family: 'Montserrat', sans-serif; font-weight: 500; }
+  .payment-icons { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pay-icon {
+    background: #2a1f14;
+    color: #bbb;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #3a2e22;
+  }
+  .social-links { display: flex; gap: 8px; margin-top: 14px; }
+  .soc-btn {
+    background: #2a1f14;
+    border: 1px solid #3a2e22;
+    color: #a0907e;
+    font-size: 12px;
+    padding: 7px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .soc-btn:hover { color: var(--gold); border-color: var(--gold); }
+
+  /* CART PANEL */
+  .cart-overlay { display: none; position: fixed; inset: 0; background: rgba(42,31,20,.55); z-index: 200; }
+  .cart-overlay.open { display: block; }
+  .cart-panel {
+    position: fixed; right: 0; top: 0; bottom: 0; width: 360px;
+    background: var(--white); z-index: 201;
+    box-shadow: -8px 0 40px rgba(42,31,20,.22);
+    display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform .28s;
+  }
+  .cart-panel.open { transform: translateX(0); }
+  .cart-header {
+    padding: 18px 22px;
+    border-bottom: 1.5px solid var(--beige);
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--cream);
+  }
+  .cart-header h3 { font-family: 'Cinzel', 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--brown-d); }
+  .cart-close {
+    background: none;
+    border: 1.5px solid var(--beige);
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted);
+  }
+  .cart-items { flex: 1; overflow-y: auto; padding: 16px 22px; }
+  .cart-item {
+    display: flex; gap: 12px; align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--beige);
+  }
+  .cart-item-img {
+    width: 54px; height: 54px;
+    border-radius: var(--radius);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700;
+    text-align: center;
+  }
+  .cart-item-name { font-size: 13px; font-weight: 600; flex: 1; color: var(--brown-d); }
+  .cart-item-price { font-weight: 800; font-size: 14px; color: var(--brown-d); font-family: 'Cinzel', 'Playfair Display', serif; }
+  .cart-footer { padding: 20px 22px; border-top: 1.5px solid var(--beige); background: var(--cream); }
+  .cart-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--brown-d); font-family: 'Cinzel', 'Playfair Display', serif; }
+  .btn-checkout {
+    width: 100%;
+    background: var(--brown-d);
+    color: var(--cream);
+    border: none;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 16px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-family: 'Montserrat', 'Lato', sans-serif;
+    letter-spacing: .5px;
+    transition: background .2s;
+  }
+  .btn-checkout:hover { background: var(--brown); }
+
+  @media (max-width: 700px) {
+    .hero h1 { font-size: 36px; }
+    .hero-visual { display: none; }
+    .trust-inner { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .header-inner { flex-wrap: wrap; }
+    .search-bar { order: 3; flex: 100%; }
+  }
+
+  /* ─── MODALES ─── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(42,31,20,.65);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--white);
+    border-radius: 22px;
+    padding: 38px 36px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 24px 70px rgba(0,0,0,.28);
+    position: relative;
+    animation: modalIn .22s ease;
+  }
+  @keyframes modalIn { from { transform: translateY(18px); opacity:0; } to { transform: translateY(0); opacity:1; } }
+  .modal-close {
+    position: absolute; top: 16px; right: 18px;
+    background: none; border: none; font-size: 20px;
+    color: var(--muted); cursor: pointer; line-height:1;
+  }
+  .modal-logo {
+    font-family: 'Cinzel', serif;
+    font-size: 20px; font-weight: 700;
+    color: var(--brown-d); letter-spacing: 4px;
+    margin-bottom: 6px; text-transform: uppercase;
+  }
+  .modal-logo span { color: var(--brown); }
+  .modal-title {
+    font-family: 'Cinzel', 'Playfair Display', serif;
+    font-size: 22px; font-weight: 600;
+    color: var(--brown-d); margin-bottom: 6px; letter-spacing: 1px;
+  }
+  .modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+  /* Google button */
+  .btn-google {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: #fff;
+    border: 2px solid var(--beige);
+    border-radius: 12px;
+    padding: 13px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Montserrat', 'Lato', sans-serif;
+    color: var(--dark);
+    cursor: pointer;
+    transition: border-color .2s, box-shadow .2s;
+    box-shadow: 0 2px 10px rgba(0,0,0,.07);
+  }
+  .btn-google:hover { border-color: var(--brown-l); box-shadow: 0 6px 20px rgba(0,0,0,.12); }
+  .btn-google svg { width: 22px; height: 22px; flex-shrink:0; }
+
+  .modal-divider {
+    display: flex; align-items: center; gap: 10px;
+    color: var(--muted); font-size: 12px;
+    margin: 18px 0;
+  }
+  .modal-divider::before, .modal-divider::after {
+    content:''; flex:1; height:1px; background: var(--beige);
+  }
+
+  /* Steps (checkout) */
+  .checkout-steps {
+    display: flex; gap: 0; margin-bottom: 28px;
+    border-radius: 10px; overflow: hidden;
+    border: 1.5px solid var(--beige);
+  }
+  .step-tab {
+    flex: 1; text-align: center; padding: 9px 4px;
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    background: var(--cream2); border-right: 1px solid var(--beige);
+    letter-spacing: .4px; text-transform: uppercase;
+    transition: background .2s, color .2s;
+  }
+  .step-tab:last-child { border-right: none; }
+  .step-tab.active { background: var(--brown-d); color: var(--cream); }
+  .step-tab.done { background: var(--green); color: #fff; }
+
+  /* Form fields */
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 13px; }
+  .form-group label { font-size: 11px; font-weight: 800; color: var(--brown-d); text-transform: uppercase; letter-spacing: .8px; }
+  .form-group input, .form-group select {
+    border: 1.5px solid var(--beige);
+    border-radius: 9px;
+    padding: 10px 13px;
+    font-size: 14px;
+    font-family: 'Montserrat', 'Lato', sans-serif;
+    color: var(--dark);
+    background: var(--cream);
+    outline: none;
+    transition: border-color .15s;
+  }
+  .form-group input:focus, .form-group select:focus { border-color: var(--brown-l); background: var(--white); }
+
+  /* Payment methods */
+  .pay-methods { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+  .pay-method-btn {
+    display: flex; align-items: center; gap: 14px;
+    border: 2px solid var(--beige);
+    border-radius: 13px; padding: 14px 18px;
+    cursor: pointer; background: var(--white);
+    transition: border-color .18s, box-shadow .18s;
+    font-family: 'Montserrat', 'Lato', sans-serif;
+  }
+  .pay-method-btn:hover { border-color: var(--brown-l); }
+  .pay-method-btn.selected { border-color: var(--brown-d); box-shadow: 0 0 0 3px rgba(92,61,30,.10); }
+  .pay-method-icon { font-size: 26px; flex-shrink: 0; }
+  .pay-method-name { font-size: 14px; font-weight: 800; color: var(--brown-d); }
+  .pay-method-sub { font-size: 11px; color: var(--muted); }
+  .pay-method-radio {
+    margin-left: auto;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--beige);
+    flex-shrink: 0;
+    background: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color .15s;
+  }
+  .pay-method-btn.selected .pay-method-radio {
+    border-color: var(--brown-d); background: var(--brown-d);
+  }
+  .pay-method-btn.selected .pay-method-radio::after {
+    content:''; width:7px; height:7px; border-radius:50%; background:#fff;
+  }
+
+  /* Card fields */
+  .card-fields { display: none; background: var(--cream2); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .card-fields.show { display: block; }
+
+  /* User chip in header */
+  .user-chip {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--cream2); border: 1.5px solid var(--beige);
+    border-radius: 20px; padding: 5px 14px 5px 7px;
+    font-size: 13px; font-weight: 600; color: var(--brown-d);
+    cursor: pointer;
+  }
+  .user-chip img { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; }
+
+  /* Order summary in checkout */
+  .order-summary {
+    background: var(--cream2); border-radius: 12px; padding: 14px 16px;
+    margin-bottom: 18px; font-size: 13px;
+  }
+  .order-summary-title { font-weight: 800; color: var(--brown-d); margin-bottom: 8px; font-size: 12px; text-transform: uppercase; letter-spacing:.8px; }
+  .order-line { display: flex; justify-content: space-between; padding: 4px 0; color: var(--muted); }
+  .order-total { display: flex; justify-content: space-between; padding-top: 10px; margin-top:8px; border-top: 1px solid var(--beige); font-weight: 800; color: var(--brown-d); font-size: 16px; }
+
+  .btn-next {
+    width: 100%;
+    background: var(--brown-d);
+    color: var(--cream);
+    border: none;
+    font-weight: 800;
+    font-size: 15px;
+    padding: 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: 'Montserrat', 'Lato', sans-serif;
+    transition: background .2s;
+    margin-top: 4px;
+  }
+  .btn-next:hover { background: var(--brown); }
+  .btn-back {
+    background: none; border: none;
+    color: var(--muted); font-size: 13px;
+    cursor: pointer; font-family: 'Montserrat', 'Lato', sans-serif;
+    margin-right: 12px; font-weight:600;
+    text-decoration: underline;
+  }
+
+  /* MP logo colors */
+  .mp-logo { font-weight: 900; font-size: 15px; }
+  .mp-logo .mp-a { color: #009EE3; }
+  .mp-logo .mp-b { color: #00B1EA; }
+
+  /* Success screen */
+  .success-screen { text-align: center; padding: 10px 0; }
+  .success-icon { font-size: 56px; margin-bottom: 14px; }
+  .success-title { font-family: 'Cinzel', 'Playfair Display', serif; font-size: 26px; font-weight: 900; color: var(--brown-d); margin-bottom: 8px; }
+  .success-sub { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 22px; }
+
+  /* Social links */
+
+  .social-links-pro {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.social-title {
+  font-weight: 800;
+  font-size: 15px;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: .2px;
+}
+
+.soc-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  text-decoration: none;
+  transition: 0.2s;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.soc-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.35);
+}
+
+.soc-card.insta {
+  background: linear-gradient(135deg, rgba(193,53,132,0.95), rgba(131,58,180,0.9));
+}
+
+.soc-card.whatsapp {
+  background: linear-gradient(135deg, rgba(37,211,102,0.9), rgba(18,140,126,0.95));
+}
+
+.soc-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.soc-icon img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.soc-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.soc-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+}
+
+.soc-user {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">🌿 Envío a todo el país · <span>30 cápsulas vegetales 100% natural</span> · Hecho en Argentina · 2954502770</div>
+
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <img src="img/logoaf.jpg" class="logo-img" alt="Alma Fungi Logo">
+      <div class="logo-right">
+        <div class="logo-text">ALMA FUNGI</div>
+        <div class="logo-sub">Hongo Vital</div>
+      </div>
+    </a>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Buscar hongos medicinales, beneficios..." id="searchInput">
+      <button class="search-btn" onclick="handleSearch()">🔍 Buscar</button>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-login" id="btnLogin" onclick="abrirLogin()">Mi cuenta</button>
+      <button class="btn-cart" onclick="toggleCart()" id="cartBtn">
+        🛒 Carrito
+        <span class="cart-badge" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="active">Inicio</a>
+    <a href="#cats" onclick="filterByCategory('Reishi')">Reishi</a>
+    <a href="#cats" onclick="filterByCategory('Cordyceps')">Cordyceps</a>
+    <a href="#cats" onclick="filterByCategory('Melena de León')">Melena de León</a>
+    <a href="#cats" onclick="filterByCategory('Tremella')">Tremella</a>
+    <a href="#cats" onclick="filterByCategory('Ashwagandha')">Ashwagandha</a>
+    <a href="#cats" onclick="filterByCategory('Cola de Pavo')">Cola de Pavo</a>
+    <a href="#prods">Ver todo 🍄</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-badge">🍄 Hongos Medicinales Premium</div>
+      <h1>Naturaleza que<br><em>transforma</em> tu salud</h1>
+      <p>Suplementos adaptógenos elaborados con calidad premium. Energía, enfoque, inmunidad y descanso desde la sabiduría de la naturaleza.</p>
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="document.getElementById('prods').scrollIntoView({behavior:'smooth'})">Ver productos</button>
+        <button class="btn-outline" onclick="document.getElementById('cats').scrollIntoView({behavior:'smooth'})">Conocé los hongos</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>100%</strong><span>Natural</span></div>
+        <div class="hero-stat"><strong>6</strong><span>Variedades</span></div>
+        <div class="hero-stat"><strong>AR 🇦🇷</strong><span>Hecho aquí</span></div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <a href="img/descripcion.jpg" target="_blank">
+        <img src="img/descripcion.jpg" alt="Lista Alma Fungi" style="cursor: zoom-in;">
+      </a>
+      <div class="mini-text">Suplementos naturales · Cápsulas vegetales · Bienestar integral</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMO STRIP -->
+<div class="promo-strip">
+  <div class="promo-track" id="promoTrack">
+    <span>Producto 100% Natural</span>
+    <span>Cápsulas Vegetales</span>
+    <span>Hecho en Argentina</span>
+    <span>Santa Rosa, La Pampa</span>
+    <span>@almafungi_ar</span>
+    <span>30 cápsulas por frasco</span>
+    <span>Producto 100% Natural</span>
+    <span>Cápsulas Vegetales</span>
+    <span>Hecho en Argentina</span>
+    <span>Santa Rosa, La Pampa</span>
+    <span>@almafungi_ar</span>
+    <span>30 cápsulas por frasco</span>
+  </div>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item">
+      <div class="trust-icon">🌿</div>
+      <div><div class="trust-label">100% Natural</div><div class="trust-sub">Sin aditivos artificiales</div></div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">💊</div>
+      <div><div class="trust-label">Cápsulas vegetales</div><div class="trust-sub">Apto veganos y vegetarianos</div></div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">🇦🇷</div>
+      <div><div class="trust-label">Hecho en Argentina</div><div class="trust-sub">Santa Rosa, La Pampa</div></div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">📦</div>
+      <div><div class="trust-label">Envío a todo el país</div><div class="trust-sub">Consulta por tu zona</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORÍAS -->
+<div class="section" id="cats">
+  <div class="section-title">Nuestros Hongos</div>
+  <div class="section-divider"></div>
+  <div class="section-sub">Cada suplemento tiene un objetivo específico para tu cuerpo y mente</div>
+
+  <div class="cats-grid">
+    <div class="cat-card" onclick="filterByCategory('Reishi')">
+      <span class="cat-icon">🍄</span>
+      <div class="cat-name">Reishi</div>
+      <div class="cat-benefit">Equilibrio · Descanso · Bienestar</div>
+    </div>
+    <div class="cat-card" onclick="filterByCategory('Cordyceps')">
+      <span class="cat-icon">⚡</span>
+      <div class="cat-name">Cordyceps</div>
+      <div class="cat-benefit">Energía · Resistencia · Vitalidad</div>
+    </div>
+    <div class="cat-card" onclick="filterByCategory('Melena de León')">
+      <span class="cat-icon">🧠</span>
+      <div class="cat-name">Melena de León</div>
+      <div class="cat-benefit">Enfoque · Memoria · Claridad</div>
+    </div>
+    <div class="cat-card" onclick="filterByCategory('Tremella')">
+      <span class="cat-icon">💧</span>
+      <div class="cat-name">Tremella</div>
+      <div class="cat-benefit">Hidratación · Piel · Inmunidad</div>
+    </div>
+    <div class="cat-card" onclick="filterByCategory('Ashwagandha')">
+      <span class="cat-icon">🌿</span>
+      <div class="cat-name">Ashwagandha</div>
+      <div class="cat-benefit">Equilibrio · Calma · Descanso</div>
+    </div>
+    <div class="cat-card" onclick="filterByCategory('Cola de Pavo')">
+      <span class="cat-icon">🛡️</span>
+      <div class="cat-name">Cola de Pavo</div>
+      <div class="cat-benefit">Inmunidad · Respiración · Vitalidad</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTOS -->
+<div class="section" id="prods">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:6px;">
+    <div>
+      <div class="section-title" id="prodsTitle">Todos los productos</div>
+      <div class="section-divider"></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button onclick="sortProducts('precio')" style="font-size:12px;padding:6px 14px;border-radius:20px;border:1.5px solid var(--beige);background:var(--white);cursor:pointer;font-weight:600;font-family:'Jost',sans-serif;color:var(--brown-d);">Menor precio</button>
+      <button onclick="sortProducts('mejor')" style="font-size:12px;padding:6px 14px;border-radius:20px;border:1.5px solid var(--beige);background:var(--white);cursor:pointer;font-weight:600;font-family:'Jost',sans-serif;color:var(--brown-d);">Mejor calificados</button>
+      <button onclick="sortProducts('todos')" style="font-size:12px;padding:6px 14px;border-radius:20px;border:1.5px solid var(--brown-d);background:var(--brown-d);cursor:pointer;font-weight:700;font-family:'Jost',sans-serif;color:var(--cream);">Ver todos</button>
+    </div>
+  </div>
+
+  <div class="section-sub" id="prodsCount">6 productos</div>
+  <div class="products-grid" id="productsGrid"></div>
+</div>
+
+<!-- FEATURED BANNER -->
+<div class="section">
+  <div class="featured-banner">
+    <div>
+      <h2>Stack completo<br><em>de bienestar</em></h2>
+      <p>Combiná Reishi + Cordyceps + Melena de León para una rutina completa. Energía, foco y descanso en un solo stack natural.</p>
+      <button class="btn-primary" onclick="alert('¡Contactanos por WhatsApp: 2954502770!')">Consultar combo →</button>
+    </div>
+    <div style="text-align:center">
+      <div class="discount-pill">-15%</div>
+      <div style="color:#d4c6b7;font-size:12px;margin-top:10px;font-weight:700;letter-spacing:1px;">EN COMBOS 3+ PRODUCTOS</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">ALMA <span class="accent">FUNGI</span></div>
+        <div class="footer-sub-logo">Hongo Vital</div>
+        <p>Suplementos naturales de hongos medicinales. Elaborados con pasión en Santa Rosa, La Pampa. Calidad y naturaleza en cada cápsula.</p>
+            <div class="social-links-pro">
+        <div class="social-title">📲 Seguinos y contactanos</div>
+
+       <a class="soc-card insta" href="https://instagram.com/almafungi_ar" target="_blank">
+       <div class="soc-icon">
+      <img src="img/instagram.png" alt="Instagram">
+      </div>
+      <div class="soc-text">
+      <div class="soc-label">Seguinos en Instagram</div>
+      <div class="soc-user">@almafungi_ar</div>
+      </div>
+      </a>
+
+      <a class="soc-card whatsapp" href="https://wa.me/5492954502770" target="_blank">
+      <div class="soc-icon">
+      <img src="img/whatsapp.png" alt="WhatsApp">
+      </div>
+      <div class="soc-text">
+      <div class="soc-label">Contactanos por WhatsApp</div>
+      <div class="soc-user">+54 9 2954 502770</div>
+      </div>
+      </a>
+      </div>
+      </div>
+      <div>
+        <h3>Productos</h3>
+        <ul>
+          <li>Reishi</li>
+          <li>Cordyceps</li>
+          <li>Melena de León</li>
+          <li>Tremella</li>
+          <li>Ashwagandha</li>
+          <li>Cola de Pavo</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Información</h3>
+        <ul>
+          <li>Sobre nosotros</li>
+          <li>Beneficios de los hongos</li>
+          <li>Preguntas frecuentes</li>
+          <li>Política de envíos</li>
+          <li>Devoluciones</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Contacto</h3>
+        <ul>
+          <li>📞 2954502770</li>
+          <li>📷 @almafungi_ar</li>
+          <li>📍 Santa Rosa, La Pampa</li>
+          <li>🇦🇷 Hecho en Argentina</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Alma Fungi · Hongo Vital · Todos los derechos reservados</span>
+      <div class="payment-icons">
+        <div class="pay-icon">VISA</div>
+        <div class="pay-icon">MASTER</div>
+        <div class="pay-icon">AMEX</div>
+        <div class="pay-icon">MP</div>
+        <div class="pay-icon">TRANSFERENCIA</div>
+        <div class="pay-icon">EFECTIVO</div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL LOGIN -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="cerrarLogin()">✕</button>
+    <div class="modal-logo">ALMA <span>FUNGI</span></div>
+    <div class="modal-title">Ingresá a tu cuenta</div>
+    <div class="modal-sub">Para finalizar tu compra necesitás iniciar sesión</div>
+
+    <button class="btn-google" onclick="loginConGoogle()">
+      <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+      </svg>
+      Continuar con Google
+    </button>
+
+    <div class="modal-divider">o ingresá con tu email</div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="tucorreo@email.com">
+    </div>
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input type="password" id="loginPass" placeholder="••••••••">
+    </div>
+
+    <button class="btn-next" onclick="loginConEmail()">Iniciar sesión →</button>
+    <p style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted);">¿No tenés cuenta? <a href="#" onclick="loginConGoogle()" style="color:var(--brown-d);font-weight:700;">Registrate con Google</a></p>
+  </div>
+</div>
+
+<!-- MODAL CHECKOUT -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal-box" style="max-width:520px;">
+    <button class="modal-close" onclick="cerrarCheckout()">✕</button>
+
+    <!-- STEPS -->
+    <div class="checkout-steps">
+      <div class="step-tab done" id="stepTab1">✓ Cuenta</div>
+      <div class="step-tab active" id="stepTab2">2. Envío</div>
+      <div class="step-tab" id="stepTab3">3. Pago</div>
+      <div class="step-tab" id="stepTab4">4. Confirmar</div>
+    </div>
+
+    <!-- STEP 2: DATOS DE ENVÍO -->
+    <div id="stepEnvio">
+      <div class="modal-title">¿A dónde enviamos?</div>
+      <div class="modal-sub" id="checkoutUserSub">Ingresá los datos de envío</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" id="envNombre" placeholder="Nombre">
+        </div>
+        <div class="form-group">
+          <label>Apellido</label>
+          <input type="text" id="envApellido" placeholder="Apellido">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Dirección</label>
+        <input type="text" id="envDireccion" placeholder="Av. San Martín 1234">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ciudad</label>
+          <input type="text" id="envCiudad" placeholder="Santa Rosa">
+        </div>
+        <div class="form-group">
+          <label>Provincia</label>
+          <input type="text" id="envProvincia" placeholder="La Pampa">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Código postal</label>
+          <input type="text" id="envCP" placeholder="6300">
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" id="envTel" placeholder="2954 000000">
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;margin-top:6px;">
+        <button class="btn-next" onclick="irAPago()">Siguiente: Método de pago →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: PAGO -->
+    <div id="stepPago" style="display:none;">
+      <div class="modal-title">¿Cómo pagás?</div>
+      <div class="modal-sub">Todos los métodos son seguros y encriptados 🔒</div>
+
+      <div class="pay-methods">
+        <div class="pay-method-btn" id="methodMP" onclick="selectMethod('mp')">
+          <div class="pay-method-icon">💳</div>
+          <div>
+            <div class="pay-method-name"><span class="mp-logo"><span class="mp-a">Mercado</span><span class="mp-b">Pago</span></span></div>
+            <div class="pay-method-sub">Pagá con tu cuenta MP, tarjeta o en efectivo</div>
+          </div>
+          <div class="pay-method-radio"></div>
+        </div>
+        <div class="pay-method-btn" id="methodCard" onclick="selectMethod('card')">
+          <div class="pay-method-icon">🏦</div>
+          <div>
+            <div class="pay-method-name">Tarjeta de crédito / débito</div>
+            <div class="pay-method-sub">Visa, Mastercard, American Express, Cabal</div>
+          </div>
+          <div class="pay-method-radio"></div>
+        </div>
+        <div class="pay-method-btn" id="methodTransfer" onclick="selectMethod('transfer')">
+          <div class="pay-method-icon">🏛️</div>
+          <div>
+            <div class="pay-method-name">Transferencia bancaria</div>
+            <div class="pay-method-sub">CVU / CBU · Acreditación al instante</div>
+          </div>
+          <div class="pay-method-radio"></div>
+        </div>
+      </div>
+
+      <!-- Campos Tarjeta -->
+      <div class="card-fields" id="cardFields">
+        <div class="form-group">
+          <label>Número de tarjeta</label>
+          <input type="text" id="cardNum" placeholder="0000 0000 0000 0000" maxlength="19" oninput="formatCard(this)">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Vencimiento</label>
+            <input type="text" id="cardExp" placeholder="MM/AA" maxlength="5" oninput="formatExp(this)">
+          </div>
+          <div class="form-group">
+            <label>CVV</label>
+            <input type="text" id="cardCvv" placeholder="123" maxlength="4">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Nombre en la tarjeta</label>
+          <input type="text" id="cardNombre" placeholder="Como figura en la tarjeta">
+        </div>
+        <div class="form-group">
+          <label>Cuotas</label>
+          <select id="cardCuotas">
+            <option value="1">1 cuota sin interés</option>
+            <option value="3">3 cuotas sin interés</option>
+            <option value="6">6 cuotas sin interés</option>
+            <option value="12">12 cuotas</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Info Mercado Pago -->
+      <div class="card-fields" id="mpFields">
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;">Al confirmar, te redirigiremos a <strong>Mercado Pago</strong> donde podrás pagar con tu cuenta, tarjeta o efectivo (Rapipago / Pago Fácil) de forma segura.</p>
+      </div>
+
+      <!-- Info Transferencia -->
+      <div class="card-fields" id="transferFields">
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px;">Realizá una transferencia a:</p>
+        <div style="background:var(--white);border-radius:9px;padding:12px 14px;font-size:13px;border:1.5px solid var(--beige);">
+          <div style="margin-bottom:6px;"><strong>Alias:</strong> almafungi.mp</div>
+          <div style="margin-bottom:6px;"><strong>CVU:</strong> 0000003100072754025030</div>
+          <div><strong>Titular:</strong> Alma Fungi S.A.S.</div>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:8px;">Enviá el comprobante por WhatsApp al 2954502770 para confirmar tu pedido.</p>
+      </div>
+
+      <div style="display:flex;align-items:center;margin-top:6px;">
+        <button class="btn-back" onclick="volverAEnvio()">← Volver</button>
+        <button class="btn-next" style="flex:1" onclick="irAConfirmar()">Revisar pedido →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: CONFIRMAR -->
+    <div id="stepConfirmar" style="display:none;">
+      <div class="modal-title">Revisá tu pedido</div>
+      <div class="modal-sub">Confirmá antes de pagar</div>
+
+      <div class="order-summary">
+        <div class="order-summary-title">🛒 Productos</div>
+        <div id="confirmItems"></div>
+        <div class="order-total">
+          <span>Total</span>
+          <span id="confirmTotal"></span>
+        </div>
+      </div>
+
+      <div class="order-summary" id="confirmEnvioBox">
+        <div class="order-summary-title">📦 Datos de envío</div>
+        <div id="confirmEnvio" style="font-size:13px;color:var(--muted);line-height:1.8;"></div>
+      </div>
+
+      <div class="order-summary" id="confirmPagoBox">
+        <div class="order-summary-title">💳 Método de pago</div>
+        <div id="confirmPago" style="font-size:13px;color:var(--muted);"></div>
+      </div>
+
+      <div style="display:flex;align-items:center;margin-top:6px;">
+        <button class="btn-back" onclick="volverAPago()">← Volver</button>
+        <button class="btn-next" style="flex:1" onclick="confirmarPedido()">✓ Confirmar y pagar</button>
+      </div>
+    </div>
+
+    <!-- STEP: ÉXITO -->
+    <div id="stepExito" style="display:none;">
+      <div class="success-screen">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">¡Pedido confirmado!</div>
+        <div class="success-sub" id="exitoMsg">Tu pedido fue recibido. Te contactaremos a la brevedad para coordinar el envío. ¡Gracias por elegir Alma Fungi! 🍄</div>
+        <button class="btn-next" onclick="cerrarCheckout();cerrarCart()">Volver a la tienda</button>
+        <p style="margin-top:14px;font-size:12px;color:var(--muted);">¿Consultas? WhatsApp: <strong>2954502770</strong></p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h3>🛒 Mi carrito</h3>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-total"><span>Total</span><span id="cartTotal">$0</span></div>
+    <button class="btn-checkout" onclick="iniciarCheckout()">Finalizar compra →</button>
+  </div>
+</div>
+
+<script>
+
+/* ─── ESTADO GLOBAL ─── */
+let PRODUCTS = [];
+let cart = [];
+let currentProducts = [];
+let currentUser = null;   // { name, email, avatar }
+let payMethod = null;     // 'mp' | 'card' | 'transfer'
+
+/* ─── CARGAR PRODUCTOS ─── */
+async function loadProductsFromAPI() {
+  try {
+    const res = await fetch('http://localhost:3000/api/products');
+    PRODUCTS = await res.json();
+    PRODUCTS = PRODUCTS.map(p => {
+      let desc = "", image = "fungi.jpg";
+      if (p.name.toLowerCase().includes("reishi"))        { desc = "Ideal para equilibrio emocional, descanso profundo y bienestar general."; image = "img/reishi.jpg"; }
+      else if (p.name.toLowerCase().includes("cordyceps")) { desc = "Energía sostenida y resistencia física para entrenamiento y vitalidad."; image = "img/cordyceps.jpg"; }
+      else if (p.name.toLowerCase().includes("melena"))   { desc = "Mejora el enfoque, memoria y claridad mental. Ideal para estudiar."; image = "img/melena_de_leon.jpg"; }
+      else if (p.name.toLowerCase().includes("tremella")) { desc = "Apoya hidratación y elasticidad de la piel. Fortalece defensas."; image = "img/tremella.jpg"; }
+      else if (p.name.toLowerCase().includes("ashwagandha")) { desc = "Reduce estrés y ansiedad. Ayuda al equilibrio hormonal y descanso."; image = "img/ashwagandha.jpg"; }
+      else if (p.name.toLowerCase().includes("cola"))     { desc = "Refuerza defensas e inmunidad. Salud respiratoria y bienestar general."; image = "img/cola_de_pavo.jpg"; }
+      return { ...p, desc, image };
+    });
+    currentProducts = [...PRODUCTS];
+    renderProducts(PRODUCTS);
+    updateCart();
+    document.getElementById('prodsCount').textContent = PRODUCTS.length + ' productos';
+  } catch (err) {
+    document.getElementById('prodsCount').textContent = '⚠️ Iniciá el servidor para ver los productos.';
+  }
+}
+loadProductsFromAPI();
+
+/* ─── RENDER / CARRITO ─── */
+function renderProducts(list) {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = list.map(p => {
+    const disc = p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : null;
+    const stars = '★'.repeat(p.rating) + '☆'.repeat(5 - p.rating);
+    const tagsHTML = p.tags.map(t => `<span class="prod-tag">${t}</span>`).join('');
+    return `
+    <div class="prod-card" onclick="quickView(${p.id})">
+      <div class="prod-img">
+        <img class="prod-real-bag" src="${p.image}" alt="${p.name}">
+        ${disc ? `<div class="badge-oferta">-${disc}%</div>` : p.badge === 'nuevo' ? `<div class="badge-nuevo">NUEVO</div>` : `<div class="badge-natural">NATURAL</div>`}
+      </div>
+      <div class="prod-body">
+        <div class="prod-brand">Alma Fungi · Hongo Vital</div>
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-benefit">${p.benefit}</div>
+        <div class="prod-desc">${p.desc || ''}</div>
+        <div class="prod-tags">${tagsHTML}</div>
+        <div class="stars">${stars}<span>(${p.reviews.toLocaleString('es-AR')})</span></div>
+        <div class="prod-price">
+          ${p.oldPrice ? `<div class="prod-price-old">$${p.oldPrice.toLocaleString('es-AR')}</div>` : ''}
+          <div class="prod-price-main"><small>$</small>${p.price.toLocaleString('es-AR')}</div>
+          <div class="prod-cuotas">✓ 30 cápsulas vegetales</div>
+        </div>
+        <button class="btn-add" onclick="event.stopPropagation();addToCart(${p.id})">+ Agregar al carrito</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addToCart(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  const existing = cart.find(x => x.id === id);
+  if (existing) existing.qty++;
+  else cart.push({ ...p, qty: 1 });
+  updateCart();
+  const btn = document.getElementById('cartBtn');
+  btn.style.background = '#4A5C40';
+  setTimeout(() => { btn.style.background = ''; }, 700);
+}
+
+function updateCart() {
+  document.getElementById('cartCount').textContent = cart.reduce((s, x) => s + x.qty, 0);
+  const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+  document.getElementById('cartTotal').textContent = '$' + total.toLocaleString('es-AR');
+  document.getElementById('cartItems').innerHTML = cart.length === 0
+    ? `<p style="color:var(--muted);text-align:center;margin-top:40px;font-size:14px;">Tu carrito está vacío 🍄</p>`
+    : cart.map(x => `
+      <div class="cart-item">
+        <div class="cart-item-img" style="background:${x.color}22;font-size:22px;">${x.icon}</div>
+        <div style="flex:1;">
+          <div class="cart-item-name">${x.name}</div>
+          <div style="font-size:11px;color:var(--muted);">30 cáps · x${x.qty}</div>
+        </div>
+        <div class="cart-item-price">$${(x.price * x.qty).toLocaleString('es-AR')}</div>
+      </div>`).join('');
+}
+
+function toggleCart() {
+  document.getElementById('cartOverlay').classList.toggle('open');
+  document.getElementById('cartPanel').classList.toggle('open');
+}
+
+function cerrarCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.getElementById('cartPanel').classList.remove('open');
+}
+
+/* ─── FILTROS / BÚSQUEDA ─── */
+function filterByCategory(cat) {
+  const filtered = PRODUCTS.filter(p => p.category.toLowerCase() === cat.toLowerCase());
+  currentProducts = filtered;
+  renderProducts(filtered);
+  document.getElementById('prodsTitle').textContent = cat;
+  document.getElementById('prodsCount').textContent = `${filtered.length} producto${filtered.length !== 1 ? 's' : ''}`;
+  document.getElementById('prods').scrollIntoView({ behavior: 'smooth' });
+}
+
+function sortProducts(by) {
+  let sorted = [...currentProducts];
+  if (by === 'precio') sorted.sort((a, b) => a.price - b.price);
+  else if (by === 'mejor') sorted.sort((a, b) => b.rating - a.rating || b.reviews - a.reviews);
+  else {
+    currentProducts = [...PRODUCTS];
+    sorted = [...PRODUCTS];
+    document.getElementById('prodsTitle').textContent = 'Todos los productos';
+    document.getElementById('prodsCount').textContent = '6 productos';
+  }
+  renderProducts(sorted);
+}
+
+function handleSearch() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  if (!q) { sortProducts('todos'); return; }
+  const filtered = PRODUCTS.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    p.benefit.toLowerCase().includes(q) ||
+    p.tags.some(t => t.toLowerCase().includes(q))
+  );
+  currentProducts = filtered;
+  renderProducts(filtered);
+  document.getElementById('prodsTitle').textContent = `Resultados para "${q}"`;
+  document.getElementById('prodsCount').textContent = `${filtered.length} producto${filtered.length !== 1 ? 's' : ''} encontrado${filtered.length !== 1 ? 's' : ''}`;
+  document.getElementById('prods').scrollIntoView({ behavior: 'smooth' });
+}
+
+function quickView(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  if (confirm(`¿Agregar "${p.name}" al carrito?\n\n${p.benefit}\n\n$${p.price.toLocaleString('es-AR')} · 30 cápsulas`)) {
+    addToCart(id);
+  }
+}
+
+document.getElementById('searchInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') handleSearch();
+});
+
+renderProducts(PRODUCTS);
+updateCart();
+
+/* ══════════════════════════════════════
+   LOGIN
+══════════════════════════════════════ */
+function abrirLogin() {
+  if (currentUser) {
+    // Si ya logueado → menú simple
+    if (confirm(`Sesión iniciada como ${currentUser.name}\n\n¿Querés cerrar sesión?`)) {
+      cerrarSesion();
+    }
+    return;
+  }
+  document.getElementById('loginModal').classList.add('open');
+}
+
+function cerrarLogin() {
+  document.getElementById('loginModal').classList.remove('open');
+}
+
+function loginConGoogle() {
+  // Simula OAuth Google – en producción usarías Google Identity Services
+  const nombre = prompt("Simulación Google OAuth\n\nIngresá tu nombre (o presioná OK para usar nombre de prueba):", "María García") || "María García";
+  const email = prompt("Ingresá tu email de Google:", "maria@gmail.com") || "maria@gmail.com";
+  setUsuario({ name: nombre, email: email, avatar: null });
+  cerrarLogin();
+}
+
+function loginConEmail() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  if (!email || !pass) { alert('Completá email y contraseña'); return; }
+  // Simula login
+  const nombre = email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  setUsuario({ name: nombre, email: email, avatar: null });
+  cerrarLogin();
+}
+
+function setUsuario(u) {
+  currentUser = u;
+  const btn = document.getElementById('btnLogin');
+  btn.innerHTML = `👤 ${u.name.split(' ')[0]}`;
+  btn.style.background = 'var(--cream2)';
+  btn.style.borderColor = 'var(--brown-l)';
+  btn.style.color = 'var(--brown-d)';
+  // Pre-llenar nombre en checkout
+  const parts = u.name.split(' ');
+  if (document.getElementById('envNombre')) {
+    document.getElementById('envNombre').value = parts[0] || '';
+    document.getElementById('envApellido').value = parts.slice(1).join(' ') || '';
+  }
+  document.getElementById('checkoutUserSub').textContent = `Hola ${u.name.split(' ')[0]}, ingresá los datos de envío`;
+}
+
+function cerrarSesion() {
+  currentUser = null;
+  const btn = document.getElementById('btnLogin');
+  btn.innerHTML = 'Mi cuenta';
+  btn.style.background = '';
+  btn.style.borderColor = '';
+  btn.style.color = '';
+}
+
+/* ══════════════════════════════════════
+   CHECKOUT
+══════════════════════════════════════ */
+function iniciarCheckout() {
+  if (cart.length === 0) { alert('Tu carrito está vacío 🍄'); return; }
+  if (!currentUser) {
+    // Cerrar carrito y abrir login primero
+    cerrarCart();
+    document.getElementById('loginModal').classList.add('open');
+    // Después del login, abrirá checkout automáticamente
+    window._pendingCheckout = true;
+    return;
+  }
+  cerrarCart();
+  abrirCheckout();
+}
+
+// Interceptar login para abrir checkout si viene del carrito
+const _loginConGoogle_orig = loginConGoogle;
+window.loginConGoogle = function() {
+  _loginConGoogle_orig();
+  if (window._pendingCheckout) { window._pendingCheckout = false; abrirCheckout(); }
+};
+const _loginConEmail_orig = loginConEmail;
+window.loginConEmail = function() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  if (!email || !pass) { alert('Completá email y contraseña'); return; }
+  const nombre = email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  setUsuario({ name: nombre, email: email, avatar: null });
+  cerrarLogin();
+  if (window._pendingCheckout) { window._pendingCheckout = false; abrirCheckout(); }
+};
+
+function abrirCheckout() {
+  // Resetear pasos
+  mostrarPaso('stepEnvio');
+  setStep(2);
+  payMethod = null;
+  document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.card-fields').forEach(f => f.classList.remove('show'));
+  document.getElementById('checkoutModal').classList.add('open');
+  if (currentUser) {
+    document.getElementById('checkoutUserSub').textContent = `Hola ${currentUser.name.split(' ')[0]}, ingresá los datos de envío`;
+  }
+}
+
+function cerrarCheckout() {
+  document.getElementById('checkoutModal').classList.remove('open');
+}
+
+function mostrarPaso(id) {
+  ['stepEnvio','stepPago','stepConfirmar','stepExito'].forEach(s => {
+    document.getElementById(s).style.display = s === id ? 'block' : 'none';
+  });
+}
+
+function setStep(n) {
+  [1,2,3,4].forEach(i => {
+    const t = document.getElementById('stepTab' + i);
+    if (i < n)       { t.className = 'step-tab done'; t.textContent = '✓ ' + ['Cuenta','Envío','Pago','Confirmar'][i-1]; }
+    else if (i === n){ t.className = 'step-tab active'; t.textContent = i + '. ' + ['Cuenta','Envío','Pago','Confirmar'][i-1]; }
+    else             { t.className = 'step-tab'; t.textContent = i + '. ' + ['Cuenta','Envío','Pago','Confirmar'][i-1]; }
+  });
+}
+
+function irAPago() {
+  const nombre = document.getElementById('envNombre').value.trim();
+  const dir = document.getElementById('envDireccion').value.trim();
+  const ciudad = document.getElementById('envCiudad').value.trim();
+  if (!nombre || !dir || !ciudad) { alert('Completá al menos nombre, dirección y ciudad'); return; }
+  mostrarPaso('stepPago');
+  setStep(3);
+}
+
+function volverAEnvio() {
+  mostrarPaso('stepEnvio');
+  setStep(2);
+}
+
+function selectMethod(m) {
+  payMethod = m;
+  document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.card-fields').forEach(f => f.classList.remove('show'));
+  document.getElementById('method' + (m === 'mp' ? 'MP' : m === 'card' ? 'Card' : 'Transfer')).classList.add('selected');
+  if (m === 'card')     document.getElementById('cardFields').classList.add('show');
+  if (m === 'mp')       document.getElementById('mpFields').classList.add('show');
+  if (m === 'transfer') document.getElementById('transferFields').classList.add('show');
+}
+
+function irAConfirmar() {
+  if (!payMethod) { alert('Seleccioná un método de pago'); return; }
+  if (payMethod === 'card') {
+    const num = document.getElementById('cardNum').value.replace(/\s/g,'');
+    const exp = document.getElementById('cardExp').value;
+    const cvv = document.getElementById('cardCvv').value;
+    const nom = document.getElementById('cardNombre').value.trim();
+    if (num.length < 13 || !exp || cvv.length < 3 || !nom) { alert('Completá todos los datos de la tarjeta'); return; }
+  }
+
+  // Rellenar resumen
+  const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+  document.getElementById('confirmItems').innerHTML = cart.map(x =>
+    `<div class="order-line"><span>${x.name} ×${x.qty}</span><span>$${(x.price*x.qty).toLocaleString('es-AR')}</span></div>`
+  ).join('');
+  document.getElementById('confirmTotal').textContent = '$' + total.toLocaleString('es-AR');
+
+  const nombre = `${document.getElementById('envNombre').value} ${document.getElementById('envApellido').value}`;
+  const dir = document.getElementById('envDireccion').value;
+  const ciudad = document.getElementById('envCiudad').value;
+  const prov = document.getElementById('envProvincia').value;
+  const cp = document.getElementById('envCP').value;
+  const tel = document.getElementById('envTel').value;
+  document.getElementById('confirmEnvio').innerHTML =
+    `${nombre}<br>${dir}<br>${ciudad}${prov ? ', ' + prov : ''}${cp ? ' (' + cp + ')' : ''}<br>📞 ${tel}`;
+
+  const pagoTextos = {
+    mp: '💳 Mercado Pago (tarjeta, efectivo o cuenta MP)',
+    card: `🏦 Tarjeta terminada en ${document.getElementById('cardNum').value.slice(-4)} · ${document.getElementById('cardCuotas').options[document.getElementById('cardCuotas').selectedIndex].text}`,
+    transfer: '🏛️ Transferencia bancaria (CVU almafungi.mp)'
+  };
+  document.getElementById('confirmPago').textContent = pagoTextos[payMethod];
+
+  mostrarPaso('stepConfirmar');
+  setStep(4);
+}
+
+function volverAPago() {
+  mostrarPaso('stepPago');
+  setStep(3);
+}
+
+function confirmarPedido() {
+  // En producción: llamada real a API de pago
+  let msg = '';
+  if (payMethod === 'mp') {
+    msg = 'Redirigiendo a Mercado Pago... (en producción se abriría el gateway de MP).\n\n¡Tu pedido fue recibido! Te contactaremos por WhatsApp. 🍄';
+  } else if (payMethod === 'card') {
+    msg = '¡Pago procesado con éxito! Tu pedido fue confirmado. Te enviaremos los detalles por email. 🍄';
+  } else {
+    msg = 'Pedido registrado. Realizá la transferencia y enviá el comprobante al 2954502770. ¡Gracias! 🍄';
+  }
+  document.getElementById('exitoMsg').textContent = msg;
+  mostrarPaso('stepExito');
+  cart = [];
+  updateCart();
+}
+
+/* ─── FORMAT HELPERS ─── */
+function formatCard(input) {
+  let v = input.value.replace(/\D/g,'').substring(0,16);
+  input.value = v.replace(/(.{4})/g,'$1 ').trim();
+}
+function formatExp(input) {
+  let v = input.value.replace(/\D/g,'').substring(0,4);
+  if (v.length >= 2) v = v.substring(0,2) + '/' + v.substring(2);
+  input.value = v;
+}
+
+</script>
+</body>
+</html>
