@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alma Fungi – Hongo Vital PREMIUM</title>
+<title>Alma Fungi – Hongo Vital</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1121,15 +1121,15 @@ footer ul li:hover { color: var(--cream); }
     <span>Producto 100% Natural</span>
     <span>Cápsulas Vegetales</span>
     <span>Hecho en Argentina</span>
-    <span>Suplementos Naturales</span>
+    <span>Santa Rosa, La Pampa</span>
     <span>@almafungi_ar</span>
-    <span>30 cápsulas por pack</span>
+    <span>30 cápsulas por frasco</span>
     <span>Producto 100% Natural</span>
     <span>Cápsulas Vegetales</span>
     <span>Hecho en Argentina</span>
-    <span>Suplementos Naturales</span>
+    <span>Santa Rosa, La Pampa</span>
     <span>@almafungi_ar</span>
-    <span>30 cápsulas por pack</span>
+    <span>30 cápsulas por frasco</span>
   </div>
 </div>
 
@@ -1146,7 +1146,7 @@ footer ul li:hover { color: var(--cream); }
     </div>
     <div class="trust-item">
       <div class="trust-icon">🇦🇷</div>
-      <div><div class="trust-label">Hecho en Argentina</div><div class="trust-sub">Inspirado en nuestra tierra</div></div>
+      <div><div class="trust-label">Hecho en Argentina</div><div class="trust-sub">Santa Rosa, La Pampa</div></div>
     </div>
     <div class="trust-item">
       <div class="trust-icon">📦</div>
@@ -1480,14 +1480,19 @@ async function loadProductsFromAPI() {
     const res = await fetch("https://alma-fungi-backend.onrender.com/api/products");
     PRODUCTS = await res.json();
     PRODUCTS = PRODUCTS.map(p => {
-      let image = "img/fungi.jpg";
-      if (p.name.toLowerCase().includes("reishi")) image = "img/reishi.jpg";
-      else if (p.name.toLowerCase().includes("cordyceps")) image = "img/cordyceps.jpg";
-      else if (p.name.toLowerCase().includes("melena")) image = "img/melena_de_leon.jpg";
-      else if (p.name.toLowerCase().includes("tremella")) image = "img/tremella.jpg";
-      else if (p.name.toLowerCase().includes("ashwagandha")) image = "img/ashwagandha.jpg";
-      else if (p.name.toLowerCase().includes("cola")) image = "img/cola_de_pavo.jpg";
-      else if (p.name.toLowerCase().includes("nad")) image = "img/nadresveratrol.jpg";
+      // Usar imagen del admin si existe, sino fallback por nombre
+      let image = p.image ? "img/" + p.image : null;
+      if (!image) {
+        const n = p.name.toLowerCase();
+        if (n.includes("reishi"))      image = "img/reishi.jpg";
+        else if (n.includes("cordyceps"))   image = "img/cordyceps.jpg";
+        else if (n.includes("melena"))      image = "img/melena_de_leon.jpg";
+        else if (n.includes("tremella"))    image = "img/tremella.jpg";
+        else if (n.includes("ashwagandha")) image = "img/ashwagandha.jpg";
+        else if (n.includes("cola"))        image = "img/cola_de_pavo.jpg";
+        else if (n.includes("nad"))         image = "img/nadresveratrol.jpg";
+        else                                image = "img/fungi.jpg";
+      }
       return { ...p, oldPrice: p.old_price, desc: p.description || "", image };
     });
     currentProducts = [...PRODUCTS];
