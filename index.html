@@ -419,6 +419,36 @@ nav { background: var(--brown); }
 .cat-name { font-size: 13px; font-weight: 700; color: var(--brown-d); }
 .cat-benefit { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
 
+  .cat-icon{
+  width:90px;
+  height:90px;
+  margin:0 auto 14px;
+  border-radius:22px;
+  overflow:hidden;
+  background:#f5efe6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 6px 18px rgba(60,40,20,.08);
+  transition:.3s ease;
+}
+
+.cat-icon img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:.4s ease;
+}
+
+.cat-card:hover .cat-icon{
+  transform:translateY(-4px);
+  box-shadow:0 10px 24px rgba(60,40,20,.14);
+}
+
+.cat-card:hover .cat-icon img{
+  transform:scale(1.06);
+}
+
 /* ── PRODUCT GRID ── */
 .products-grid {
   display: grid;
@@ -1156,51 +1186,79 @@ footer ul li:hover { color: var(--cream); }
 </div>
 
 <!-- CATEGORÍAS -->
-<div class="section" id="cats">
-  <div class="section-header">
-    <div class="section-label">Explorar</div>
-    <div class="section-title">Nuestros Hongos<br>y Suplementos</div>
-    <div class="section-divider"></div>
-    <div class="section-sub">Cada suplemento tiene un objetivo específico para tu cuerpo y mente</div>
+<section class="categories">
+  <div class="section-title">
+    <span>Explorar</span>
+    <h2>Nuestros Hongos y Suplementos</h2>
+    <p>
+      Cada suplemento tiene un objetivo específico para tu cuerpo y mente
+    </p>
   </div>
+
   <div class="cats-grid">
+
     <div class="cat-card" onclick="filterByCategory('Reishi')">
-      <span class="cat-icon">🍄</span>
+      <div class="cat-icon">
+        <img src="img/reishihongo.png" alt="Reishi">
+      </div>
       <div class="cat-name">Reishi</div>
-      <div class="cat-benefit">Equilibrio · Descanso · Bienestar</div>
+      <div class="cat-benefit">
+        Equilibrio · Descanso · Bienestar
+      </div>
     </div>
+
     <div class="cat-card" onclick="filterByCategory('Cordyceps')">
-      <span class="cat-icon">⚡</span>
+      <div class="cat-icon">
+        <img src="img/cordyceptshongo.png" alt="Cordyceps">
+      </div>
       <div class="cat-name">Cordyceps</div>
-      <div class="cat-benefit">Energía · Resistencia · Vitalidad</div>
+      <div class="cat-benefit">
+        Energía · Resistencia · Vitalidad
+      </div>
     </div>
+
     <div class="cat-card" onclick="filterByCategory('Melena de León')">
-      <span class="cat-icon">🧠</span>
+      <div class="cat-icon">
+        <img src="img/melenadeleonhongo.png" alt="Melena de León">
+      </div>
       <div class="cat-name">Melena de León</div>
-      <div class="cat-benefit">Enfoque · Memoria · Claridad</div>
+      <div class="cat-benefit">
+        Enfoque · Memoria · Claridad
+      </div>
     </div>
+
     <div class="cat-card" onclick="filterByCategory('Tremella')">
-      <span class="cat-icon">💧</span>
+      <div class="cat-icon">
+        <img src="img/tremellahongo.png" alt="Tremella">
+      </div>
       <div class="cat-name">Tremella</div>
-      <div class="cat-benefit">Hidratación · Piel · Inmunidad</div>
+      <div class="cat-benefit">
+        Hidratación · Piel · Inmunidad
+      </div>
     </div>
+
     <div class="cat-card" onclick="filterByCategory('Ashwagandha')">
-      <span class="cat-icon">🌿</span>
+      <div class="cat-icon">
+        <img src="img/ashwagandhahongo.png" alt="Ashwagandha">
+      </div>
       <div class="cat-name">Ashwagandha</div>
-      <div class="cat-benefit">Equilibrio · Calma · Descanso</div>
+      <div class="cat-benefit">
+        Equilibrio · Calma · Descanso
+      </div>
     </div>
+
     <div class="cat-card" onclick="filterByCategory('Cola de Pavo')">
-      <span class="cat-icon">🛡️</span>
+      <div class="cat-icon">
+        <img src="img/coladepavohongo.png" alt="Cola de Pavo">
+      </div>
       <div class="cat-name">Cola de Pavo</div>
-      <div class="cat-benefit">Inmunidad · Respiración · Vitalidad</div>
+      <div class="cat-benefit">
+        Inmunidad · Respiración · Vitalidad
+      </div>
     </div>
-    <div class="cat-card" onclick="filterByCategory('Suplementos')">
-      <span class="cat-icon">💊</span>
-      <div class="cat-name">Suplementos</div>
-      <div class="cat-benefit">Energía · Antioxidantes · Bienestar</div>
-    </div>
+
   </div>
-</div>
+</section>
 
 <!-- PRODUCTOS -->
 <div class="section" id="prods">
