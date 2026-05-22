@@ -1370,22 +1370,48 @@ function renderProducts(list) {
           <div class="prod-price-main"><small>$</small>${p.price.toLocaleString('es-AR')}</div>
           <div class="prod-cuotas">✓ 30 cápsulas vegetales</div>
         </div>
-        <button class="btn-add" onclick="event.stopPropagation();addToCart(${p.id})">+ Agregar al carrito</button>
+        <button class="btn-add" onclick="event.stopPropagation();addToCart(${p.id}, this)">+ Agregar al carrito</button>
       </div>
     </div>`;
   }).join('');
 }
 
-function addToCart(id) {
+function addToCart(id, btnElement) {
   const p = PRODUCTS.find(x => x.id === id);
   if (!p) return;
   const existing = cart.find(x => x.id === id);
   if (existing) existing.qty++;
   else cart.push({ ...p, qty: 1 });
+  
   updateCart();
-  const btn = document.getElementById('cartBtn');
-  btn.style.transform = 'scale(1.05)';
-  setTimeout(() => { btn.style.transform = 'scale(1)'; }, 200);
+
+  // EFECTO 1: Animar el botón de la tarjeta que se clickeó
+  if (btnElement) {
+    const originalText = btnElement.innerHTML;
+    const originalBg = btnElement.style.background;
+    
+    // Cambiamos texto y color a verde momentáneamente
+    btnElement.innerHTML = '✓ ¡Agregado!';
+    btnElement.style.background = 'var(--green)';
+    btnElement.style.transform = 'scale(0.97)';
+    
+    // Volvemos a la normalidad después de 1 segundo
+    setTimeout(() => {
+      btnElement.innerHTML = originalText;
+      btnElement.style.background = originalBg;
+      btnElement.style.transform = 'scale(1)';
+    }, 1000);
+  }
+
+  // EFECTO 2: Animar el botón del carrito en el header
+  const headerCartBtn = document.getElementById('cartBtn');
+  headerCartBtn.style.transform = 'scale(1.15)';
+  headerCartBtn.style.background = 'var(--green)';
+  
+  setTimeout(() => { 
+    headerCartBtn.style.transform = 'scale(1)'; 
+    headerCartBtn.style.background = 'var(--brown-d)';
+  }, 400);
 }
 
 function updateCart() {
@@ -1395,11 +1421,14 @@ function updateCart() {
   document.getElementById('cartTotal').textContent = '$' + total.toLocaleString('es-AR');
   const btnVaciar = document.getElementById('btnVaciar');
   if (btnVaciar) btnVaciar.style.display = cart.length > 0 ? 'block' : 'none';
+  
   document.getElementById('cartItems').innerHTML = cart.length === 0
     ? `<p style="color:var(--muted);text-align:center;margin-top:60px;font-size:16px;">Tu carrito está vacío 🍄</p>`
     : cart.map(x => `
       <div class="cart-item">
-        <div class="cart-item-img">${x.icon || '🍄'}</div>
+        <div class="cart-item-img" style="overflow: hidden;">
+          <img src="${x.image}" alt="${x.name}" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
         <div style="flex:1;">
           <div class="cart-item-name">${x.name}</div>
           <div class="cart-qty">
