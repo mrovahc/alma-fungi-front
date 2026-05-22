@@ -415,7 +415,34 @@ nav { background: var(--brown); }
   box-shadow: var(--shadow-md);
   transform: translateY(-3px);
 }
-.cat-icon { font-size: 30px; margin-bottom: 10px; display: block; }
+.cat-icon{
+  width:90px;
+  height:90px;
+  margin:0 auto 14px;
+  border-radius:24px;
+  overflow:hidden;
+  background:#f5efe6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 8px 18px rgba(0,0,0,.08);
+  transition:.35s ease;
+}
+
+.cat-icon img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:.45s ease;
+}
+
+.cat-card:hover .cat-icon{
+  transform:translateY(-4px);
+}
+
+.cat-card:hover .cat-icon img{
+  transform:scale(1.08);
+}
 .cat-name { font-size: 13px; font-weight: 700; color: var(--brown-d); }
 .cat-benefit { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
 
@@ -998,6 +1025,16 @@ footer ul li:hover { color: var(--cream); }
 }
 .sort-btn:hover, .sort-btn.active { border-color: var(--brown-d); background: var(--brown-d); color: var(--cream); }
 
+@keyframes cartPop{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.2);}
+  100%{transform:scale(1);}
+}
+
+.cart-pop{
+  animation:cartPop .45s ease;
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
   .hero-inner { grid-template-columns: 1fr; padding: 44px 20px 72px; gap: 0; min-height: auto; }
@@ -1164,693 +1201,47 @@ footer ul li:hover { color: var(--cream); }
     <div class="section-sub">Cada suplemento tiene un objetivo específico para tu cuerpo y mente</div>
   </div>
   <div class="cats-grid">
+
     <div class="cat-card" onclick="filterByCategory('Reishi')">
-      <span class="cat-icon">🍄</span>
+      <div class="cat-icon"><img src="img/reishihongo.png" alt="Reishi"></div>
       <div class="cat-name">Reishi</div>
       <div class="cat-benefit">Equilibrio · Descanso · Bienestar</div>
     </div>
+
     <div class="cat-card" onclick="filterByCategory('Cordyceps')">
-      <span class="cat-icon">⚡</span>
+      <div class="cat-icon"><img src="img/cordyceptshongo.png" alt="Cordyceps"></div>
       <div class="cat-name">Cordyceps</div>
       <div class="cat-benefit">Energía · Resistencia · Vitalidad</div>
     </div>
+
     <div class="cat-card" onclick="filterByCategory('Melena de León')">
-      <span class="cat-icon">🧠</span>
+      <div class="cat-icon"><img src="img/melenadeleonhongo.png" alt="Melena de León"></div>
       <div class="cat-name">Melena de León</div>
       <div class="cat-benefit">Enfoque · Memoria · Claridad</div>
     </div>
+
     <div class="cat-card" onclick="filterByCategory('Tremella')">
-      <span class="cat-icon">💧</span>
+      <div class="cat-icon"><img src="img/tremellahongo.png" alt="Tremella"></div>
       <div class="cat-name">Tremella</div>
       <div class="cat-benefit">Hidratación · Piel · Inmunidad</div>
     </div>
+
     <div class="cat-card" onclick="filterByCategory('Ashwagandha')">
-      <span class="cat-icon">🌿</span>
+      <div class="cat-icon"><img src="img/ashwagandhahongo.png" alt="Ashwagandha"></div>
       <div class="cat-name">Ashwagandha</div>
       <div class="cat-benefit">Equilibrio · Calma · Descanso</div>
     </div>
+
     <div class="cat-card" onclick="filterByCategory('Cola de Pavo')">
-      <span class="cat-icon">🛡️</span>
+      <div class="cat-icon"><img src="img/coladepavohongo.png" alt="Cola de Pavo"></div>
       <div class="cat-name">Cola de Pavo</div>
       <div class="cat-benefit">Inmunidad · Respiración · Vitalidad</div>
     </div>
+
     <div class="cat-card" onclick="filterByCategory('Suplementos')">
-      <span class="cat-icon">💊</span>
+      <div class="cat-icon"><img src="img/suplementoshongos.jpg" alt="Suplementos"></div>
       <div class="cat-name">Suplementos</div>
       <div class="cat-benefit">Energía · Antioxidantes · Bienestar</div>
     </div>
+
   </div>
-</div>
-
-<!-- PRODUCTOS -->
-<div class="section" id="prods">
-  <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:6px;">
-    <div class="section-header" style="margin-bottom:0;">
-      <div class="section-label">Catálogo</div>
-      <div class="section-title" id="prodsTitle">Todos los productos</div>
-      <div class="section-divider"></div>
-    </div>
-    <div style="display:flex;gap:7px;flex-wrap:wrap;padding-bottom:4px;">
-      <button class="sort-btn" onclick="sortProducts('precio')">Menor precio</button>
-      <button class="sort-btn" onclick="sortProducts('mejor')">Mejor calificados</button>
-      <button class="sort-btn active" onclick="sortProducts('todos')">Ver todos</button>
-    </div>
-  </div>
-  <div class="section-sub" id="prodsCount" style="margin-bottom:22px;">Cargando productos...</div>
-  <div class="products-grid" id="productsGrid"></div>
-</div>
-
-<!-- FEATURED BANNER -->
-<div class="section">
-  <div class="featured-banner">
-    <div>
-      <h2>Stack completo<br><em>de bienestar</em></h2>
-      <p>Combiná Reishi + Cordyceps + Melena de León para una rutina completa. Energía, foco y descanso en un solo stack natural.</p>
-      <button class="btn-primary" onclick="alert('¡Contactanos por WhatsApp: 2954502770!')">Consultar combo →</button>
-    </div>
-    <div style="text-align:center;">
-      <div class="discount-pill">-15%<small>combos</small></div>
-    </div>
-  </div>
-</div>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-logo">ALMA <span class="accent">FUNGI</span></div>
-        <div class="footer-sub-logo">Hongo Vital</div>
-        <p>Suplementos naturales de hongos medicinales. Elaborados con pasión en Santa Rosa, La Pampa. Calidad y naturaleza en cada cápsula.</p>
-        <div class="social-links-pro">
-          <div class="social-title">Seguinos y contactanos</div>
-          <div class="soc-row">
-            <a class="soc-card insta" href="https://instagram.com/almafungi_ar" target="_blank" rel="noopener">
-              <div class="soc-icon"><img src="img/instagram.png" alt="Instagram"></div>
-              <div class="soc-text">
-                <div class="soc-label">Instagram</div>
-                <div class="soc-user">@almafungi_ar</div>
-              </div>
-            </a>
-            <a class="soc-card whatsapp" href="https://wa.me/5492954502770" target="_blank" rel="noopener">
-              <div class="soc-icon"><img src="img/whatsapp.png" alt="WhatsApp"></div>
-              <div class="soc-text">
-                <div class="soc-label">WhatsApp</div>
-                <div class="soc-user">2954 502770</div>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div>
-        <h3>Productos</h3>
-        <ul>
-          <li>Reishi</li>
-          <li>Cordyceps</li>
-          <li>Melena de León</li>
-          <li>Tremella</li>
-          <li>Ashwagandha</li>
-          <li>Cola de Pavo</li>
-        </ul>
-      </div>
-      <div>
-        <h3>Información</h3>
-        <ul>
-          <li>Sobre nosotros</li>
-          <li>Beneficios de los hongos</li>
-          <li>Preguntas frecuentes</li>
-          <li>Política de envíos</li>
-          <li>Devoluciones</li>
-        </ul>
-      </div>
-      <div>
-        <h3>Contacto</h3>
-        <ul>
-          <li>📞 2954502770</li>
-          <li>📷 @almafungi_ar</li>
-          <li>📍 Santa Rosa, La Pampa</li>
-          <li>🇦🇷 Hecho en Argentina</li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 Alma Fungi · Hongo Vital · Todos los derechos reservados</span>
-      <div class="payment-icons">
-        <div class="pay-icon">VISA</div>
-        <div class="pay-icon">MASTER</div>
-        <div class="pay-icon">AMEX</div>
-        <div class="pay-icon">MP</div>
-        <div class="pay-icon">EFECTIVO</div>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<!-- MODAL LOGIN -->
-<div class="modal-overlay" id="loginModal">
-  <div class="modal-box">
-    <button class="modal-close" onclick="cerrarLogin()">✕</button>
-    <div class="modal-logo">ALMA <span>FUNGI</span></div>
-    <div class="modal-title">Ingresá a tu cuenta</div>
-    <div class="modal-sub">Para finalizar tu compra necesitás iniciar sesión</div>
-    <button class="btn-google" onclick="loginConGoogle()">
-      <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-      </svg>
-      Continuar con Google
-    </button>
-    <div class="modal-divider">o ingresá con tu email</div>
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" id="loginEmail" placeholder="tucorreo@email.com">
-    </div>
-    <div class="form-group">
-      <label>Contraseña</label>
-      <input type="password" id="loginPass" placeholder="••••••••">
-    </div>
-    <button class="btn-next" onclick="loginConEmail()">Iniciar sesión →</button>
-    <p style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted);">¿No tenés cuenta? <a href="#" onclick="loginConGoogle()" style="color:var(--brown-d);font-weight:700;">Registrate con Google</a></p>
-  </div>
-</div>
-
-<!-- MODAL CHECKOUT -->
-<div class="modal-overlay" id="checkoutModal">
-  <div class="modal-box" style="max-width:520px;">
-    <button class="modal-close" onclick="cerrarCheckout()">✕</button>
-    <div class="checkout-steps">
-      <div class="step-tab done" id="stepTab1">✓ Cuenta</div>
-      <div class="step-tab active" id="stepTab2">2. Envío</div>
-      <div class="step-tab" id="stepTab3">3. Pago</div>
-      <div class="step-tab" id="stepTab4">4. Confirmar</div>
-    </div>
-
-    <!-- STEP 2: ENVÍO -->
-    <div id="stepEnvio">
-      <div class="modal-title">¿A dónde enviamos?</div>
-      <div class="modal-sub" id="checkoutUserSub">Ingresá los datos de envío</div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Nombre</label>
-          <input type="text" id="envNombre" placeholder="Nombre">
-        </div>
-        <div class="form-group">
-          <label>Apellido</label>
-          <input type="text" id="envApellido" placeholder="Apellido">
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Dirección</label>
-        <input type="text" id="envDireccion" placeholder="Av. San Martín 1234">
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Ciudad</label>
-          <input type="text" id="envCiudad" placeholder="Santa Rosa">
-        </div>
-        <div class="form-group">
-          <label>Provincia</label>
-          <input type="text" id="envProvincia" placeholder="La Pampa">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Código postal</label>
-          <input type="text" id="envCP" placeholder="6300">
-        </div>
-        <div class="form-group">
-          <label>Teléfono</label>
-          <input type="tel" id="envTel" placeholder="2954 000000">
-        </div>
-      </div>
-      <button class="btn-next" onclick="irAPago()">Siguiente: Método de pago →</button>
-    </div>
-
-    <!-- STEP 3: PAGO -->
-    <div id="stepPago" style="display:none;">
-      <div class="modal-title">¿Cómo pagás?</div>
-      <div class="modal-sub">Todos los métodos son seguros y encriptados 🔒</div>
-      <div class="pay-methods">
-        <div class="pay-method-btn selected" id="methodMP" onclick="selectMethod('mp')">
-          <div class="pay-method-icon">💳</div>
-          <div>
-            <div class="pay-method-name"><span class="mp-logo"><span class="mp-a">Mercado</span><span class="mp-b">Pago</span></span></div>
-            <div class="pay-method-sub">Visa · Master · AMEX · Cabal · Efectivo · Cuenta MP</div>
-          </div>
-          <div class="pay-method-radio"></div>
-        </div>
-      </div>
-      <div style="background:var(--cream2);border-radius:11px;padding:15px;margin-bottom:14px;font-size:13px;color:var(--muted);line-height:1.8;">
-        Al confirmar, te redirigiremos a <strong style="color:var(--brown-d);">Mercado Pago</strong> donde podrás pagar con:<br>
-        💳 Visa · Mastercard · AMEX · Cabal<br>
-        📱 Cuenta Mercado Pago<br>
-        💵 Efectivo (Rapipago / Pago Fácil)<br>
-        🔒 100% seguro y encriptado
-      </div>
-      <div style="display:flex;align-items:center;">
-        <button class="btn-back" onclick="volverAEnvio()">← Volver</button>
-        <button class="btn-next" style="flex:1" onclick="irAConfirmar()">Revisar pedido →</button>
-      </div>
-    </div>
-
-    <!-- STEP 4: CONFIRMAR -->
-    <div id="stepConfirmar" style="display:none;">
-      <div class="modal-title">Revisá tu pedido</div>
-      <div class="modal-sub">Confirmá antes de pagar</div>
-      <div class="order-summary">
-        <div class="order-summary-title">🛒 Productos</div>
-        <div id="confirmItems"></div>
-        <div class="order-total"><span>Total</span><span id="confirmTotal"></span></div>
-      </div>
-      <div class="order-summary" id="confirmEnvioBox">
-        <div class="order-summary-title">📦 Datos de envío</div>
-        <div id="confirmEnvio" style="font-size:13px;color:var(--muted);line-height:1.8;"></div>
-      </div>
-      <div class="order-summary" id="confirmPagoBox">
-        <div class="order-summary-title">💳 Método de pago</div>
-        <div id="confirmPago" style="font-size:13px;color:var(--muted);"></div>
-      </div>
-      <div style="display:flex;align-items:center;">
-        <button class="btn-back" onclick="volverAPago()">← Volver</button>
-        <button class="btn-next" style="flex:1" onclick="confirmarPedido()">✓ Confirmar y pagar</button>
-      </div>
-    </div>
-
-    <!-- ÉXITO -->
-    <div id="stepExito" style="display:none;">
-      <div class="success-screen">
-        <div class="success-icon">🎉</div>
-        <div class="success-title">¡Pedido confirmado!</div>
-        <div class="success-sub" id="exitoMsg">Tu pedido fue recibido. Te contactaremos a la brevedad para coordinar el envío. ¡Gracias por elegir Alma Fungi! 🍄</div>
-        <button class="btn-next" onclick="cerrarCheckout();cerrarCart()">Volver a la tienda</button>
-        <p style="margin-top:14px;font-size:12px;color:var(--muted);">¿Consultas? WhatsApp: <strong>2954502770</strong></p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- CART -->
-<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
-<div class="cart-panel" id="cartPanel">
-  <div class="cart-header">
-    <div style="display:flex;flex-direction:column;gap:2px;">
-      <h3>🛒 Mi carrito</h3>
-      <button class="cart-vaciar" onclick="vaciarCarrito()" id="btnVaciar" style="display:none;">Vaciar todo</button>
-    </div>
-    <button class="cart-close" onclick="toggleCart()">✕</button>
-  </div>
-  <div class="cart-items" id="cartItems"></div>
-  <div class="cart-footer">
-    <div class="cart-total"><span>Total</span><span id="cartTotal">$0</span></div>
-    <button class="btn-checkout" onclick="iniciarCheckout()">Finalizar compra →</button>
-  </div>
-</div>
-
-<script>
-let PRODUCTS = [];
-let cart = [];
-let currentProducts = [];
-let currentUser = null;
-let payMethod = null;
-
-async function loadProductsFromAPI() {
-  try {
-    const res = await fetch("https://alma-fungi-backend.onrender.com/api/products");
-    PRODUCTS = await res.json();
-    PRODUCTS = PRODUCTS.map(p => {
-      // Usar imagen del admin si existe, sino fallback por nombre
-      let image = p.image ? "img/" + p.image : null;
-      if (!image) {
-        const n = p.name.toLowerCase();
-        if (n.includes("reishi"))      image = "img/reishi.jpg";
-        else if (n.includes("cordyceps"))   image = "img/cordyceps.jpg";
-        else if (n.includes("melena"))      image = "img/melena_de_leon.jpg";
-        else if (n.includes("tremella"))    image = "img/tremella.jpg";
-        else if (n.includes("ashwagandha")) image = "img/ashwagandha.jpg";
-        else if (n.includes("cola"))        image = "img/cola_de_pavo.jpg";
-        else if (n.includes("nad"))         image = "img/nadresveratrol.jpg";
-        else                                image = "img/fungi.jpg";
-      }
-      return { ...p, oldPrice: p.old_price, desc: p.description || "", image };
-    });
-    currentProducts = [...PRODUCTS];
-    renderProducts(PRODUCTS);
-    updateCart();
-    document.getElementById('prodsCount').textContent = PRODUCTS.length + ' productos disponibles';
-  } catch (err) {
-    document.getElementById('prodsCount').textContent = '⚠️ Error al cargar productos.';
-  }
-}
-loadProductsFromAPI();
-
-function renderProducts(list) {
-  const grid = document.getElementById('productsGrid');
-  if (!list.length) { grid.innerHTML = '<p style="color:var(--muted);grid-column:1/-1;padding:32px 0;">No se encontraron productos.</p>'; return; }
-  grid.innerHTML = list.map(p => {
-    const disc = p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : null;
-    const stars = '★'.repeat(p.rating) + '☆'.repeat(5 - p.rating);
-    const tagsHTML = p.tags.map(t => `<span class="prod-tag">${t}</span>`).join('');
-    return `
-    <div class="prod-card" onclick="quickView(${p.id})">
-      <div class="prod-img">
-        <img class="prod-real-bag" src="${p.image}" alt="${p.name}">
-        ${disc ? `<div class="badge-oferta">-${disc}%</div>` : p.badge === 'nuevo' ? `<div class="badge-nuevo">NUEVO</div>` : `<div class="badge-natural">NATURAL</div>`}
-      </div>
-      <div class="prod-body">
-        <div class="prod-brand">Alma Fungi · Hongo Vital</div>
-        <div class="prod-name">${p.name}</div>
-        <div class="prod-benefit">${p.benefit}</div>
-        <div class="prod-desc">${p.desc || ''}</div>
-        <div class="prod-tags">${tagsHTML}</div>
-        <div class="stars">${stars}<span>(${p.reviews.toLocaleString('es-AR')})</span></div>
-        <div class="prod-price">
-          ${p.oldPrice ? `<div class="prod-price-old">$${p.oldPrice.toLocaleString('es-AR')}</div>` : ''}
-          <div class="prod-price-main"><small>$</small>${p.price.toLocaleString('es-AR')}</div>
-          <div class="prod-cuotas">✓ 30 cápsulas vegetales</div>
-        </div>
-        <button class="btn-add" onclick="event.stopPropagation();addToCart(${p.id})">+ Agregar al carrito</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function addToCart(id) {
-  const p = PRODUCTS.find(x => x.id === id);
-  if (!p) return;
-  const existing = cart.find(x => x.id === id);
-  if (existing) existing.qty++;
-  else cart.push({ ...p, qty: 1 });
-  updateCart();
-  const btn = document.getElementById('cartBtn');
-  btn.style.background = '#4A5C40';
-  setTimeout(() => { btn.style.background = ''; }, 700);
-}
-
-function updateCart() {
-  const total_qty = cart.reduce((s, x) => s + x.qty, 0);
-  document.getElementById('cartCount').textContent = total_qty;
-  const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
-  document.getElementById('cartTotal').textContent = '$' + total.toLocaleString('es-AR');
-  const btnVaciar = document.getElementById('btnVaciar');
-  if (btnVaciar) btnVaciar.style.display = cart.length > 0 ? 'block' : 'none';
-  document.getElementById('cartItems').innerHTML = cart.length === 0
-    ? `<p style="color:var(--muted);text-align:center;margin-top:40px;font-size:14px;">Tu carrito está vacío 🍄</p>`
-    : cart.map(x => `
-      <div class="cart-item">
-        <div class="cart-item-img" style="background:${x.color || '#f0e8dc'}22;font-size:22px;">${x.icon || '🍄'}</div>
-        <div style="flex:1;">
-          <div class="cart-item-name">${x.name}</div>
-          <div class="cart-qty">
-            <button class="cart-qty-btn" onclick="cambiarCantidad(${x.id}, -1)">−</button>
-            <span class="cart-qty-num">${x.qty}</span>
-            <button class="cart-qty-btn" onclick="cambiarCantidad(${x.id}, 1)">+</button>
-          </div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
-          <div class="cart-item-price">$${(x.price * x.qty).toLocaleString('es-AR')}</div>
-          <button class="cart-remove" onclick="removeFromCart(${x.id})" title="Eliminar">✕</button>
-        </div>
-      </div>`).join('');
-}
-
-function cambiarCantidad(id, delta) {
-  const item = cart.find(x => x.id === id);
-  if (!item) return;
-  item.qty += delta;
-  if (item.qty <= 0) cart = cart.filter(x => x.id !== id);
-  updateCart();
-}
-
-function removeFromCart(id) {
-  cart = cart.filter(x => x.id !== id);
-  updateCart();
-}
-
-function vaciarCarrito() {
-  if (!confirm('¿Vaciar el carrito?')) return;
-  cart = [];
-  updateCart();
-}
-
-function toggleCart() {
-  document.getElementById('cartOverlay').classList.toggle('open');
-  document.getElementById('cartPanel').classList.toggle('open');
-}
-function cerrarCart() {
-  document.getElementById('cartOverlay').classList.remove('open');
-  document.getElementById('cartPanel').classList.remove('open');
-}
-
-function filterByCategory(cat) {
-  const filtered = PRODUCTS.filter(p => p.category.toLowerCase() === cat.toLowerCase());
-  currentProducts = filtered;
-  renderProducts(filtered);
-  document.getElementById('prodsTitle').textContent = cat;
-  document.getElementById('prodsCount').textContent = `${filtered.length} producto${filtered.length !== 1 ? 's' : ''} disponible${filtered.length !== 1 ? 's' : ''}`;
-  document.getElementById('prods').scrollIntoView({ behavior: 'smooth' });
-}
-
-function sortProducts(by) {
-  let sorted = [...currentProducts];
-  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  if (by === 'precio') sorted.sort((a, b) => a.price - b.price);
-  else if (by === 'mejor') sorted.sort((a, b) => b.rating - a.rating || b.reviews - a.reviews);
-  else {
-    currentProducts = [...PRODUCTS];
-    sorted = [...PRODUCTS];
-    document.getElementById('prodsTitle').textContent = 'Todos los productos';
-    document.getElementById('prodsCount').textContent = PRODUCTS.length + ' productos disponibles';
-  }
-  renderProducts(sorted);
-}
-
-function handleSearch() {
-  const q = document.getElementById('searchInput').value.toLowerCase().trim();
-  if (!q) { sortProducts('todos'); return; }
-  const filtered = PRODUCTS.filter(p =>
-    p.name.toLowerCase().includes(q) ||
-    p.benefit.toLowerCase().includes(q) ||
-    p.tags.some(t => t.toLowerCase().includes(q))
-  );
-  currentProducts = filtered;
-  renderProducts(filtered);
-  document.getElementById('prodsTitle').textContent = `Resultados para "${q}"`;
-  document.getElementById('prodsCount').textContent = `${filtered.length} producto${filtered.length !== 1 ? 's' : ''} encontrado${filtered.length !== 1 ? 's' : ''}`;
-  document.getElementById('prods').scrollIntoView({ behavior: 'smooth' });
-}
-
-function quickView(id) {
-  const p = PRODUCTS.find(x => x.id === id);
-  if (!p) return;
-  if (confirm(`¿Agregar "${p.name}" al carrito?\n\n${p.benefit}\n\n$${p.price.toLocaleString('es-AR')} · 30 cápsulas`)) {
-    addToCart(id);
-  }
-}
-
-document.getElementById('searchInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') handleSearch();
-});
-
-// ── LOGIN ──
-function abrirLogin() {
-  if (currentUser) {
-    if (confirm(`Sesión iniciada como ${currentUser.name}\n\n¿Querés cerrar sesión?`)) cerrarSesion();
-    return;
-  }
-  document.getElementById('loginModal').classList.add('open');
-}
-function cerrarLogin() { document.getElementById('loginModal').classList.remove('open'); }
-
-function setUsuario(user) {
-  currentUser = user;
-  const btn = document.getElementById('btnLogin');
-  if (user.avatar) {
-    btn.innerHTML = `<span class="user-chip"><img src="${user.avatar}" onerror="this.style.display='none'">${user.name.split(' ')[0]}</span>`;
-  } else {
-    btn.innerHTML = `👤 ${user.name.split(' ')[0]}`;
-    btn.style.background = 'var(--cream2)';
-    btn.style.borderColor = 'var(--beige)';
-  }
-}
-
-function loginConGoogle() {}
-function loginConEmail() {}
-function cerrarSesion() {}
-
-// ── CHECKOUT ──
-function iniciarCheckout() {
-  if (cart.length === 0) { alert('Tu carrito está vacío 🍄'); return; }
-  if (!currentUser) {
-    window._pendingCheckout = true;
-    cerrarCart();
-    abrirLogin();
-    return;
-  }
-  abrirCheckout();
-}
-function abrirCheckout() {
-  cerrarCart();
-  payMethod = 'mp';
-  document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
-  if (document.getElementById('methodMP')) document.getElementById('methodMP').classList.add('selected');
-  if (currentUser) {
-    document.getElementById('checkoutUserSub').textContent = `Hola, ${currentUser.name.split(' ')[0]} 👋`;
-    document.getElementById('envNombre').value = currentUser.name.split(' ')[0] || '';
-  }
-  mostrarPaso('stepEnvio');
-  setStep(2);
-  document.getElementById('checkoutModal').classList.add('open');
-}
-function cerrarCheckout() { document.getElementById('checkoutModal').classList.remove('open'); }
-
-function mostrarPaso(id) {
-  ['stepEnvio','stepPago','stepConfirmar','stepExito'].forEach(s => {
-    document.getElementById(s).style.display = s === id ? 'block' : 'none';
-  });
-}
-function setStep(n) {
-  for (let i = 1; i <= 4; i++) {
-    const t = document.getElementById('stepTab' + i);
-    t.className = 'step-tab';
-    if (i < n) t.classList.add('done');
-    else if (i === n) t.classList.add('active');
-  }
-}
-
-function irAPago() {
-  const nombre = document.getElementById('envNombre').value.trim();
-  const dir = document.getElementById('envDireccion').value.trim();
-  const ciudad = document.getElementById('envCiudad').value.trim();
-  if (!nombre || !dir || !ciudad) { alert('Completá al menos nombre, dirección y ciudad'); return; }
-  mostrarPaso('stepPago'); setStep(3);
-}
-function volverAEnvio() { mostrarPaso('stepEnvio'); setStep(2); }
-
-function selectMethod(m) {
-  payMethod = m;
-  document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
-  document.getElementById('methodMP').classList.add('selected');
-}
-
-function irAConfirmar() {
-  if (!payMethod) { alert('Seleccioná un método de pago'); return; }
-  const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
-  document.getElementById('confirmItems').innerHTML = cart.map(x =>
-    `<div class="order-line"><span>${x.name} ×${x.qty}</span><span>$${(x.price*x.qty).toLocaleString('es-AR')}</span></div>`
-  ).join('');
-  document.getElementById('confirmTotal').textContent = '$' + total.toLocaleString('es-AR');
-  const nombre = `${document.getElementById('envNombre').value} ${document.getElementById('envApellido').value}`.trim();
-  const dir = document.getElementById('envDireccion').value;
-  const ciudad = document.getElementById('envCiudad').value;
-  const prov = document.getElementById('envProvincia').value;
-  const cp = document.getElementById('envCP').value;
-  const tel = document.getElementById('envTel').value;
-  document.getElementById('confirmEnvio').innerHTML = `${nombre}<br>${dir}<br>${ciudad}${prov ? ', '+prov : ''}${cp ? ' ('+cp+')' : ''}<br>📞 ${tel}`;
-  document.getElementById('confirmPago').textContent = '💳 Mercado Pago · Visa, Master, AMEX, efectivo y más';
-  mostrarPaso('stepConfirmar'); setStep(4);
-}
-function volverAPago() { mostrarPaso('stepPago'); setStep(3); }
-
-async function confirmarPedido() {
-  if (payMethod === 'mp') {
-    const btn = document.querySelector('#stepConfirmar .btn-next');
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Procesando...'; }
-    try {
-      const items = cart.map(x => ({ title: x.name, quantity: x.qty, price: x.price }));
-      const BACKEND = 'https://alma-fungi-backend.onrender.com';
-      const res = await fetch(`${BACKEND}/api/create_preference`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items })
-      });
-      const data = await res.json();
-      if (!res.ok || !data.id) throw new Error(data.error || 'Error al crear la preferencia');
-      window.location.href = `https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=${data.id}`;
-      return;
-    } catch (err) {
-      console.error('❌ Error MP:', err);
-      alert('Hubo un problema al conectar con Mercado Pago.\n\n' + err.message);
-      if (btn) { btn.disabled = false; btn.textContent = '✓ Confirmar y pagar'; }
-      return;
-    }
-  }
-}
-</script>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, signInWithPopup, signInWithEmailAndPassword,
-           createUserWithEmailAndPassword, GoogleAuthProvider,
-           signOut, onAuthStateChanged }
-    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey:            "AIzaSyAdt1u4E3D7XguPBDfSuWyxB6v215gVc0g",
-    authDomain:        "almafungi2.firebaseapp.com",
-    projectId:         "almafungi2",
-    storageBucket:     "almafungi2.firebasestorage.app",
-    messagingSenderId: "838701531860",
-    appId:             "1:838701531860:web:4cc6dac4571fec821b3141"
-  };
-
-  const app      = initializeApp(firebaseConfig);
-  const auth     = getAuth(app);
-  const provider = new GoogleAuthProvider();
-
-  function _afterLogin() {
-    cerrarLogin();
-    if (window._pendingCheckout) { window._pendingCheckout = false; abrirCheckout(); }
-  }
-
-  window.loginConGoogle = async function() {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const u = result.user;
-      setUsuario({ name: u.displayName || u.email, email: u.email, avatar: u.photoURL });
-      _afterLogin();
-    } catch(e) {
-      if (e.code !== 'auth/popup-closed-by-user') alert('Error Google: ' + e.message);
-    }
-  };
-
-  window.loginConEmail = async function() {
-    const email = document.getElementById('loginEmail').value.trim();
-    const pass  = document.getElementById('loginPass').value;
-    if (!email || !pass) { alert('Completá email y contraseña'); return; }
-    try {
-      let cred;
-      try { cred = await signInWithEmailAndPassword(auth, email, pass); }
-      catch(err) {
-        if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential')
-          cred = await createUserWithEmailAndPassword(auth, email, pass);
-        else throw err;
-      }
-      const u = cred.user;
-      const nombre = u.displayName || email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g, c => c.toUpperCase());
-      setUsuario({ name: nombre, email: u.email, avatar: u.photoURL });
-      _afterLogin();
-    } catch(e) { alert('Error al iniciar sesión: ' + e.message); }
-  };
-
-  window.cerrarSesion = async function() {
-    await signOut(auth);
-    currentUser = null;
-    const btn = document.getElementById('btnLogin');
-    btn.innerHTML = 'Mi cuenta';
-    btn.style.background = '';
-    btn.style.borderColor = '';
-    btn.style.color = '';
-  };
-
-  onAuthStateChanged(auth, user => {
-    if (user) {
-      const nombre = user.displayName || user.email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g, c => c.toUpperCase());
-      setUsuario({ name: nombre, email: user.email, avatar: user.photoURL });
-    }
-  });
-</script>
-</body>
-</html>
