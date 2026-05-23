@@ -1080,6 +1080,164 @@ footer ul li:hover { color: var(--cream); }
 @media (max-width: 380px) {
   .products-grid { grid-template-columns: 1fr; }
 }
+
+/* ── TOAST NOTIFICACIÓN ── */
+.toast-notif {
+  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--brown-d); color: var(--cream);
+  padding: 11px 22px; border-radius: 30px;
+  font-size: 13px; font-weight: 600;
+  box-shadow: 0 8px 28px rgba(42,26,14,.3);
+  z-index: 500; opacity: 0;
+  transition: opacity .25s, transform .25s;
+  white-space: nowrap; pointer-events: none;
+  display: flex; align-items: center; gap: 8px;
+}
+.toast-notif.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── WHATSAPP FLOTANTE ── */
+.wa-float {
+  position: fixed; bottom: 24px; right: 24px; z-index: 400;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #25D366;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 24px rgba(37,211,102,.45);
+  text-decoration: none;
+  transition: transform .2s, box-shadow .2s;
+  animation: waPulse 2.5s infinite;
+}
+.wa-float:hover { transform: scale(1.1); box-shadow: 0 10px 32px rgba(37,211,102,.55); animation: none; }
+.wa-float img { width: 32px; height: 32px; }
+@keyframes waPulse {
+  0%, 100% { box-shadow: 0 6px 24px rgba(37,211,102,.45); }
+  50% { box-shadow: 0 6px 32px rgba(37,211,102,.7), 0 0 0 8px rgba(37,211,102,.12); }
+}
+
+/* ── MODAL PRODUCTO ── */
+.prod-modal-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(42,26,14,.65); z-index: 350;
+  align-items: center; justify-content: center;
+  padding: 16px; backdrop-filter: blur(6px);
+}
+.prod-modal-bg.open { display: flex; }
+.prod-modal {
+  background: var(--white); border-radius: 22px;
+  max-width: 680px; width: 100%;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 32px 100px rgba(0,0,0,.3);
+  animation: modalIn .22s ease;
+  position: relative;
+}
+.prod-modal-close {
+  position: absolute; top: 14px; right: 16px;
+  background: rgba(0,0,0,.1); border: none;
+  width: 32px; height: 32px; border-radius: 50%;
+  font-size: 16px; cursor: pointer; color: var(--muted);
+  z-index: 2; display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.prod-modal-close:hover { background: rgba(0,0,0,.18); }
+.prod-modal-inner {
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.prod-modal-img {
+  background: linear-gradient(160deg, var(--cream2), rgba(237,228,216,.5));
+  border-radius: 22px 0 0 22px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 32px; min-height: 320px;
+}
+.prod-modal-img img {
+  width: 200px; height: 200px; object-fit: contain;
+  filter: drop-shadow(0 16px 28px rgba(0,0,0,.22));
+}
+.prod-modal-info { padding: 32px 28px; }
+.prod-modal-brand { font-size: 9.5px; font-weight: 700; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+.prod-modal-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: var(--brown-d); margin-bottom: 6px; line-height: 1.15; }
+.prod-modal-ben { font-size: 13px; color: var(--brown); font-weight: 600; margin-bottom: 14px; }
+.prod-modal-desc { font-size: 13px; color: var(--muted); line-height: 1.75; margin-bottom: 16px; }
+.prod-modal-attrs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.prod-modal-attr {
+  background: rgba(201,180,154,.2); border: 1px solid rgba(201,180,154,.5);
+  color: var(--brown-d); font-size: 11px; font-weight: 700;
+  padding: 4px 12px; border-radius: 20px;
+}
+.prod-modal-stars { color: var(--gold); font-size: 13px; margin-bottom: 16px; }
+.prod-modal-stars span { color: var(--muted); font-size: 12px; margin-left: 5px; }
+.prod-modal-price { margin-bottom: 18px; }
+.prod-modal-price-old { font-size: 13px; color: var(--muted); text-decoration: line-through; }
+.prod-modal-price-main { font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 700; color: var(--brown-d); line-height: 1; }
+.prod-modal-price-main small { font-size: 20px; font-family: 'DM Sans', sans-serif; }
+.prod-modal-caps { font-size: 12px; color: var(--green-l); font-weight: 700; margin-top: 3px; }
+.prod-modal-btn {
+  width: 100%; background: var(--brown-d); color: var(--cream);
+  border: none; font-weight: 700; font-size: 14.5px;
+  padding: 14px; border-radius: 12px; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; transition: background .2s;
+}
+.prod-modal-btn:hover { background: var(--brown); }
+@media (max-width: 600px) {
+  .prod-modal-inner { grid-template-columns: 1fr; }
+  .prod-modal-img { border-radius: 22px 22px 0 0; min-height: 200px; padding: 24px; }
+  .prod-modal-img img { width: 150px; height: 150px; }
+  .prod-modal-info { padding: 22px 20px; }
+  .prod-modal-name { font-size: 24px; }
+}
+
+/* ── TESTIMONIOS ── */
+.testimonios { background: var(--white); border-top: 1px solid rgba(201,180,154,.3); border-bottom: 1px solid rgba(201,180,154,.3); }
+.test-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.test-card {
+  background: var(--cream);
+  border: 1px solid rgba(201,180,154,.4);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+}
+.test-stars { color: var(--gold); font-size: 14px; margin-bottom: 10px; }
+.test-txt { font-size: 13.5px; color: var(--dark); line-height: 1.75; font-style: italic; margin-bottom: 14px; }
+.test-author { display: flex; align-items: center; gap: 10px; }
+.test-avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--cream2); border: 2px solid var(--beige);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.test-name { font-size: 13px; font-weight: 700; color: var(--brown-d); }
+.test-prod { font-size: 11px; color: var(--muted); margin-top: 1px; }
+@media (max-width: 768px) { .test-grid { grid-template-columns: 1fr; gap: 12px; } }
+
+/* ── POR QUÉ ALMA FUNGI ── */
+.por-que { background: var(--cream2); }
+.porq-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.porq-item {
+  background: var(--white);
+  border: 1px solid rgba(201,180,154,.4);
+  border-radius: var(--radius-lg);
+  padding: 22px 18px;
+  text-align: center;
+  transition: box-shadow .2s, transform .2s;
+}
+.porq-item:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.porq-icon { font-size: 32px; margin-bottom: 10px; }
+.porq-title { font-size: 13px; font-weight: 700; color: var(--brown-d); margin-bottom: 5px; }
+.porq-desc { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+@media (max-width: 768px) { .porq-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 400px) { .porq-grid { grid-template-columns: 1fr; } }
+
+/* ── STOCK BADGE ── */
+.stock-low {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 700; color: var(--rust);
+  margin-top: 5px;
+}
+.stock-low::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--rust); animation: blink 1.2s infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
 </style>
 </head>
 <body>
@@ -1267,6 +1425,117 @@ footer ul li:hover { color: var(--cream); }
     </div>
   </div>
 </div>
+
+
+<!-- MODAL PRODUCTO -->
+<div class="prod-modal-bg" id="prodModalBg" onclick="if(event.target===this)cerrarModalProducto()">
+  <div class="prod-modal" id="prodModal"></div>
+</div>
+
+<!-- POR QUÉ ALMA FUNGI -->
+<div class="por-que">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-label">Nuestra diferencia</div>
+      <div class="section-title">¿Por qué elegir<br>Alma Fungi?</div>
+      <div class="section-divider"></div>
+    </div>
+    <div class="porq-grid">
+      <div class="porq-item">
+        <div class="porq-icon">🌿</div>
+        <div class="porq-title">Sin TACC</div>
+        <div class="porq-desc">Libre de gluten, apto celíacos y personas con sensibilidad al trigo</div>
+      </div>
+      <div class="porq-item">
+        <div class="porq-icon">🌱</div>
+        <div class="porq-title">100% Vegano</div>
+        <div class="porq-desc">Cápsulas vegetales sin ingredientes de origen animal</div>
+      </div>
+      <div class="porq-item">
+        <div class="porq-icon">🥛</div>
+        <div class="porq-title">Sin Lactosa</div>
+        <div class="porq-desc">Sin derivados lácteos, apto para intolerantes a la lactosa</div>
+      </div>
+      <div class="porq-item">
+        <div class="porq-icon">⚡</div>
+        <div class="porq-title">Apto Keto</div>
+        <div class="porq-desc">Sin azúcares ni carbohidratos añadidos, compatible con dieta cetogénica</div>
+      </div>
+      <div class="porq-item">
+        <div class="porq-icon">🔬</div>
+        <div class="porq-title">Extracto Puro</div>
+        <div class="porq-desc">Concentrado de alta potencia, sin rellenos ni aditivos artificiales</div>
+      </div>
+      <div class="porq-item">
+        <div class="porq-icon">🇦🇷</div>
+        <div class="porq-title">Hecho en Argentina</div>
+        <div class="porq-desc">Producción local en Santa Rosa, La Pampa. Frescura garantizada</div>
+      </div>
+      <div class="porq-item">
+        <div class="porq-icon">📦</div>
+        <div class="porq-title">Envío a todo el país</div>
+        <div class="porq-desc">Despachamos a cualquier provincia de Argentina</div>
+      </div>
+      <div class="porq-item">
+        <div class="porq-icon">💬</div>
+        <div class="porq-title">Asesoramiento</div>
+        <div class="porq-desc">Te ayudamos a elegir el suplemento ideal para tus objetivos</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIOS -->
+<div class="testimonios">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-label">Comunidad</div>
+      <div class="section-title">Lo que dicen<br>nuestros clientes</div>
+      <div class="section-divider"></div>
+      <div class="section-sub">Más de 500 clientes ya experimentaron los beneficios de Alma Fungi</div>
+    </div>
+    <div class="test-grid">
+      <div class="test-card">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-txt">"Empecé con el Reishi hace 2 meses y noto una diferencia enorme en mi calidad de sueño. Me levanto descansada y sin esa sensación de cansancio acumulado. Lo recomiendo a todos."</div>
+        <div class="test-author">
+          <div class="test-avatar">👩</div>
+          <div>
+            <div class="test-name">María G.</div>
+            <div class="test-prod">Reishi · Santa Rosa, La Pampa</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-txt">"El Cordyceps cambió mis entrenamientos. Tengo más resistencia y me recupero mucho más rápido. Llevo 3 meses tomándolo y no lo dejaría nunca. La calidad del producto es excelente."</div>
+        <div class="test-author">
+          <div class="test-avatar">👨</div>
+          <div>
+            <div class="test-name">Lucas M.</div>
+            <div class="test-prod">Cordyceps · Buenos Aires</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars">★★★★★</div>
+        <div class="test-txt">"Con la Melena de León me concentro mucho mejor en el trabajo. Soy diseñadora y la claridad mental que me da es increíble. La atención y el envío fueron rapidísimos."</div>
+        <div class="test-author">
+          <div class="test-avatar">👩</div>
+          <div>
+            <div class="test-name">Valentina R.</div>
+            <div class="test-prod">Melena de León · Córdoba</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHATSAPP FLOTANTE -->
+<a class="wa-float" href="https://wa.me/5492954502770?text=Hola%20Alma%20Fungi%2C%20quiero%20consultar%20sobre%20sus%20productos%20🍄" target="_blank" rel="noopener" title="Consultar por WhatsApp">
+  <img src="img/whatsapp.png" alt="WhatsApp">
+</a>
 
 <!-- FOOTER -->
 <footer>
@@ -1547,9 +1816,9 @@ function renderProducts(list) {
     const stars = '★'.repeat(p.rating) + '☆'.repeat(5 - p.rating);
     const tagsHTML = p.tags.map(t => `<span class="prod-tag">${t}</span>`).join('');
     return `
-    <div class="prod-card" onclick="quickView(${p.id})">
+    <div class="prod-card" onclick="abrirModalProducto(${p.id})">
       <div class="prod-img">
-        <img class="prod-real-bag" src="${p.image}" alt="${p.name}">
+        <img class="prod-real-bag" src="${p.image}" alt="${p.name}" onerror="this.src='img/fungi.jpg'">
         ${disc ? `<div class="badge-oferta">-${disc}%</div>` : p.badge === 'nuevo' ? `<div class="badge-nuevo">NUEVO</div>` : `<div class="badge-natural">NATURAL</div>`}
       </div>
       <div class="prod-body">
@@ -1563,6 +1832,7 @@ function renderProducts(list) {
           ${p.oldPrice ? `<div class="prod-price-old">$${p.oldPrice.toLocaleString('es-AR')}</div>` : ''}
           <div class="prod-price-main"><small>$</small>${p.price.toLocaleString('es-AR')}</div>
           <div class="prod-cuotas">✓ 30 cápsulas vegetales</div>
+          ${p.stock_qty && p.stock_qty <= 5 ? `<div class="stock-low">Quedan ${p.stock_qty} unidades</div>` : ''}
         </div>
         <button class="btn-add" onclick="event.stopPropagation();addToCart(${p.id}, this)">+ Agregar al carrito</button>
       </div>
@@ -1578,22 +1848,36 @@ function addToCart(id, btnEl) {
   else cart.push({ ...p, qty: 1 });
   updateCart();
 
-  // Animación en el botón del carrito
+  // Bounce en el botón del carrito
   const cartBtn = document.getElementById('cartBtn');
   cartBtn.classList.add('cart-bounce');
   setTimeout(() => cartBtn.classList.remove('cart-bounce'), 500);
 
-  // Animación flyToCart en la imagen del producto
+  // Animación fly en la imagen
   if (btnEl) {
-    const card = btnEl.closest('.prod-card');
+    const card = btnEl.closest('.prod-card, .prod-modal');
     if (card) {
-      const img = card.querySelector('.prod-real-bag');
-      if (img) {
-        img.classList.add('adding');
-        setTimeout(() => img.classList.remove('adding'), 450);
-      }
+      const img = card.querySelector('.prod-real-bag, .prod-modal-img img');
+      if (img) { img.classList.add('adding'); setTimeout(() => img.classList.remove('adding'), 450); }
     }
   }
+
+  // Toast notificación
+  mostrarToast('✓ ' + p.name + ' agregado al carrito');
+}
+
+function mostrarToast(msg) {
+  let t = document.getElementById('toastNotif');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toastNotif';
+    t.className = 'toast-notif';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
 function updateCart() {
@@ -1690,12 +1974,43 @@ function handleSearch() {
   document.getElementById('prods').scrollIntoView({ behavior: 'smooth' });
 }
 
-function quickView(id) {
+function quickView(id) { abrirModalProducto(id); }
+
+function abrirModalProducto(id) {
   const p = PRODUCTS.find(x => x.id === id);
   if (!p) return;
-  if (confirm(`¿Agregar "${p.name}" al carrito?\n\n${p.benefit}\n\n$${p.price.toLocaleString('es-AR')} · 30 cápsulas`)) {
-    addToCart(id);
-  }
+  const disc = p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : null;
+  const stars = '★'.repeat(p.rating) + '☆'.repeat(5 - p.rating);
+  const attrs = [...(p.tags || []), '30 Cápsulas', 'Sin TACC', 'Vegano'].slice(0, 5);
+  document.getElementById('prodModal').innerHTML = `
+    <div class="prod-modal-close" onclick="cerrarModalProducto()">✕</div>
+    <div class="prod-modal-inner">
+      <div class="prod-modal-img">
+        <img src="${p.image || 'img/fungi.jpg'}" alt="${p.name}" onerror="this.src='img/fungi.jpg'">
+      </div>
+      <div class="prod-modal-info">
+        <div class="prod-modal-brand">Alma Fungi · Hongo Vital</div>
+        <div class="prod-modal-name">${p.name}</div>
+        <div class="prod-modal-ben">${p.benefit}</div>
+        <div class="prod-modal-stars">${stars}<span>(${p.reviews.toLocaleString('es-AR')} reseñas)</span></div>
+        <div class="prod-modal-desc">${p.desc || p.description || ''}</div>
+        <div class="prod-modal-attrs">${attrs.map(a => `<span class="prod-modal-attr">${a}</span>`).join('')}</div>
+        <div class="prod-modal-price">
+          ${disc ? `<div class="prod-modal-price-old">$${p.oldPrice.toLocaleString('es-AR')}</div>` : ''}
+          <div class="prod-modal-price-main"><small>$</small>${p.price.toLocaleString('es-AR')}</div>
+          <div class="prod-modal-caps">✓ 30 cápsulas vegetales · 100% Natural</div>
+          ${p.stock_qty && p.stock_qty <= 5 ? `<div class="stock-low" style="margin-top:6px;">Quedan ${p.stock_qty} unidades</div>` : ''}
+        </div>
+        <button class="prod-modal-btn" onclick="addToCart(${p.id}, this);cerrarModalProducto()">+ Agregar al carrito</button>
+      </div>
+    </div>`;
+  document.getElementById('prodModalBg').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarModalProducto() {
+  document.getElementById('prodModalBg').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 document.getElementById('searchInput').addEventListener('keydown', e => {
