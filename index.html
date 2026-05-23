@@ -416,6 +416,40 @@ nav { background: var(--brown); }
   transform: translateY(-3px);
 }
 .cat-icon { font-size: 30px; margin-bottom: 10px; display: block; }
+.cat-img {
+  width: 72px; height: 72px;
+  object-fit: contain;
+  margin: 0 auto 10px;
+  display: block;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,.18));
+  transition: transform .22s ease;
+}
+.cat-card:hover .cat-img { transform: translateY(-4px) scale(1.07); }
+
+/* Efecto al agregar al carrito */
+@keyframes flyToCart {
+  0%   { transform: scale(1); opacity: 1; }
+  40%  { transform: scale(1.18) translateY(-8px); opacity: 1; }
+  100% { transform: scale(0) translateY(-40px); opacity: 0; }
+}
+@keyframes cartBounce {
+  0%, 100% { transform: scale(1); }
+  30%  { transform: scale(1.25); }
+  60%  { transform: scale(.9); }
+  80%  { transform: scale(1.08); }
+}
+.adding { animation: flyToCart .45s ease forwards; pointer-events: none; }
+.cart-bounce { animation: cartBounce .5s ease; }
+
+/* Imagen en el carrito */
+.cart-item-thumb {
+  width: 52px; height: 52px;
+  border-radius: var(--radius);
+  object-fit: contain;
+  background: var(--cream2);
+  border: 1px solid var(--beige);
+  flex-shrink: 0;
+}
 .cat-name { font-size: 13px; font-weight: 700; color: var(--brown-d); }
 .cat-benefit { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
 
@@ -1165,37 +1199,37 @@ footer ul li:hover { color: var(--cream); }
   </div>
   <div class="cats-grid">
     <div class="cat-card" onclick="filterByCategory('Reishi')">
-      <span class="cat-icon">🍄</span>
+      <img class="cat-img" src="img/reishihongo.png" alt="Reishi">
       <div class="cat-name">Reishi</div>
       <div class="cat-benefit">Equilibrio · Descanso · Bienestar</div>
     </div>
     <div class="cat-card" onclick="filterByCategory('Cordyceps')">
-      <span class="cat-icon">⚡</span>
+      <img class="cat-img" src="img/cordyceptshongo.png" alt="Cordyceps">
       <div class="cat-name">Cordyceps</div>
       <div class="cat-benefit">Energía · Resistencia · Vitalidad</div>
     </div>
     <div class="cat-card" onclick="filterByCategory('Melena de León')">
-      <span class="cat-icon">🧠</span>
+      <img class="cat-img" src="img/melenadeleonhongo.png" alt="Melena de León">
       <div class="cat-name">Melena de León</div>
       <div class="cat-benefit">Enfoque · Memoria · Claridad</div>
     </div>
     <div class="cat-card" onclick="filterByCategory('Tremella')">
-      <span class="cat-icon">💧</span>
+      <img class="cat-img" src="img/tremellahongo.png" alt="Tremella">
       <div class="cat-name">Tremella</div>
       <div class="cat-benefit">Hidratación · Piel · Inmunidad</div>
     </div>
     <div class="cat-card" onclick="filterByCategory('Ashwagandha')">
-      <span class="cat-icon">🌿</span>
+      <img class="cat-img" src="img/ashwagandhahongo.png" alt="Ashwagandha">
       <div class="cat-name">Ashwagandha</div>
       <div class="cat-benefit">Equilibrio · Calma · Descanso</div>
     </div>
     <div class="cat-card" onclick="filterByCategory('Cola de Pavo')">
-      <span class="cat-icon">🛡️</span>
+      <img class="cat-img" src="img/coladepavohongo.png" alt="Cola de Pavo">
       <div class="cat-name">Cola de Pavo</div>
       <div class="cat-benefit">Inmunidad · Respiración · Vitalidad</div>
     </div>
     <div class="cat-card" onclick="filterByCategory('Suplementos')">
-      <span class="cat-icon">💊</span>
+      <img class="cat-img" src="img/suplementoshongos.jpg" alt="Suplementos">
       <div class="cat-name">Suplementos</div>
       <div class="cat-benefit">Energía · Antioxidantes · Bienestar</div>
     </div>
@@ -1530,22 +1564,36 @@ function renderProducts(list) {
           <div class="prod-price-main"><small>$</small>${p.price.toLocaleString('es-AR')}</div>
           <div class="prod-cuotas">✓ 30 cápsulas vegetales</div>
         </div>
-        <button class="btn-add" onclick="event.stopPropagation();addToCart(${p.id})">+ Agregar al carrito</button>
+        <button class="btn-add" onclick="event.stopPropagation();addToCart(${p.id}, this)">+ Agregar al carrito</button>
       </div>
     </div>`;
   }).join('');
 }
 
-function addToCart(id) {
+function addToCart(id, btnEl) {
   const p = PRODUCTS.find(x => x.id === id);
   if (!p) return;
   const existing = cart.find(x => x.id === id);
   if (existing) existing.qty++;
   else cart.push({ ...p, qty: 1 });
   updateCart();
-  const btn = document.getElementById('cartBtn');
-  btn.style.background = '#4A5C40';
-  setTimeout(() => { btn.style.background = ''; }, 700);
+
+  // Animación en el botón del carrito
+  const cartBtn = document.getElementById('cartBtn');
+  cartBtn.classList.add('cart-bounce');
+  setTimeout(() => cartBtn.classList.remove('cart-bounce'), 500);
+
+  // Animación flyToCart en la imagen del producto
+  if (btnEl) {
+    const card = btnEl.closest('.prod-card');
+    if (card) {
+      const img = card.querySelector('.prod-real-bag');
+      if (img) {
+        img.classList.add('adding');
+        setTimeout(() => img.classList.remove('adding'), 450);
+      }
+    }
+  }
 }
 
 function updateCart() {
@@ -1559,7 +1607,7 @@ function updateCart() {
     ? `<p style="color:var(--muted);text-align:center;margin-top:40px;font-size:14px;">Tu carrito está vacío 🍄</p>`
     : cart.map(x => `
       <div class="cart-item">
-        <div class="cart-item-img" style="background:${x.color || '#f0e8dc'}22;font-size:22px;">${x.icon || '🍄'}</div>
+        <img class="cart-item-thumb" src="${x.image || 'img/fungi.jpg'}" alt="${x.name}" onerror="this.src='img/fungi.jpg'">
         <div style="flex:1;">
           <div class="cart-item-name">${x.name}</div>
           <div class="cart-qty">
