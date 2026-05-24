@@ -1920,6 +1920,7 @@ async function loadProductsFromAPI() {
     updateCart();
     document.getElementById('prodsCount').textContent = PRODUCTS.length + ' productos disponibles';
     document.getElementById('benefitFilters').style.display = 'flex';
+    checkProductoParam();
     // Guardar carrito al modificar
     const _origUpdateCart = updateCart;
   } catch (err) {
@@ -2077,6 +2078,7 @@ function sortProducts(by) {
     document.getElementById('prodsTitle').textContent = 'Todos los productos';
     document.getElementById('prodsCount').textContent = PRODUCTS.length + ' productos disponibles';
     document.getElementById('benefitFilters').style.display = 'flex';
+    checkProductoParam();
     // Guardar carrito al modificar
     const _origUpdateCart = updateCart;
   }
@@ -2126,7 +2128,7 @@ function abrirModalProducto(id) {
           ${p.stock_qty && p.stock_qty <= 5 ? `<div class="stock-low" style="margin-top:6px;">Quedan ${p.stock_qty} unidades</div>` : ''}
         </div>
         <button class="prod-modal-btn" onclick="addToCart(${p.id}, this);cerrarModalProducto()">+ Agregar al carrito</button>
-        <button class="share-btn" onclick="compartirProducto('${p.name}','${p.benefit}')">
+        <button class="share-btn" onclick="compartirProducto(${p.id},'${p.name}','${p.benefit}')">
           <img src="img/whatsapp.png" style="width:18px;height:18px;"> Compartir por WhatsApp
         </button>
       </div>
@@ -2290,6 +2292,21 @@ function loadCart() {
 }
 
 // ── PÁGINA DE ÉXITO POST-PAGO ─────────────────────────────────────────────────
+function checkProductoParam() {
+  const params = new URLSearchParams(window.location.search);
+  const prodId = params.get('producto');
+  if (prodId && PRODUCTS.length > 0) {
+    const p = PRODUCTS.find(x => String(x.id) === prodId);
+    if (p) {
+      setTimeout(() => {
+        abrirModalProducto(p.id);
+        // Limpiar la URL sin recargar
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }, 600);
+    }
+  }
+}
+
 function checkSuccessPage() {
   const params = new URLSearchParams(window.location.search);
   const status = params.get('status') || params.get('collection_status');
@@ -2348,8 +2365,13 @@ function filtrarBeneficio(ben, btn) {
 }
 
 // ── COMPARTIR POR WHATSAPP ────────────────────────────────────────────────────
-function compartirProducto(nombre, beneficio) {
-  const msg = encodeURIComponent(`¡Mirá este producto de Alma Fungi! 🍄\n*${nombre}*\n${beneficio}\n\nVer en: https://almafungi2.web.app`);
+function compartirProducto(id, nombre, beneficio) {
+  const url = `https://almafungi2.web.app?producto=${id}`;
+  const msg = encodeURIComponent(`¡Mirá este producto de Alma Fungi! 🍄
+*${nombre}*
+${beneficio}
+
+👉 ${url}`);
   window.open('https://wa.me/?text=' + msg, '_blank');
 }
 
