@@ -1238,6 +1238,111 @@ footer ul li:hover { color: var(--cream); }
 }
 .stock-low::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--rust); animation: blink 1.2s infinite; }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+
+/* ── VOLVER ARRIBA ── */
+.back-top {
+  position: fixed; bottom: 90px; right: 24px; z-index: 399;
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--brown-d); color: var(--cream);
+  border: none; cursor: pointer; font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(42,26,14,.3);
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .25s, transform .25s;
+  pointer-events: none;
+}
+.back-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.back-top:hover { background: var(--brown); }
+
+/* ── BÚSQUEDA CON SUGERENCIAS ── */
+.search-wrap { flex: 1; position: relative; }
+.search-suggestions {
+  position: absolute; top: 100%; left: 0; right: 0;
+  background: var(--white); border: 1.5px solid var(--beige);
+  border-top: none; border-radius: 0 0 var(--radius) var(--radius);
+  box-shadow: var(--shadow-md); z-index: 200;
+  max-height: 220px; overflow-y: auto;
+  display: none;
+}
+.search-suggestions.open { display: block; }
+.sug-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; cursor: pointer;
+  transition: background .12s; font-size: 13px; color: var(--dark);
+}
+.sug-item:hover { background: var(--cream2); }
+.sug-item img { width: 32px; height: 32px; object-fit: contain; border-radius: 5px; }
+.sug-item-name { font-weight: 600; }
+.sug-item-ben { font-size: 11px; color: var(--muted); }
+
+/* ── FILTROS POR BENEFICIO ── */
+.benefit-filters {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.ben-tag {
+  font-size: 11.5px; padding: 6px 14px; border-radius: 20px;
+  border: 1.5px solid var(--beige); background: var(--white);
+  cursor: pointer; font-weight: 600; color: var(--brown-d);
+  font-family: 'DM Sans', sans-serif; transition: .15s;
+}
+.ben-tag:hover, .ben-tag.active {
+  border-color: var(--brown-d); background: var(--brown-d); color: var(--cream);
+}
+
+/* ── CONTADOR ANIMADO ── */
+@keyframes countUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.hero-stat strong.counting { animation: countUp .5s ease; }
+
+/* ── COMPARTIR PRODUCTO ── */
+.share-btn {
+  width: 100%; margin-top: 10px;
+  background: #25D366; color: #fff;
+  border: none; font-weight: 700; font-size: 13.5px;
+  padding: 11px; border-radius: 12px; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; transition: background .2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.share-btn:hover { background: #1da851; }
+
+/* ── PÁGINA ÉXITO PERSONALIZADA ── */
+.success-page {
+  display: none; position: fixed; inset: 0;
+  background: var(--cream); z-index: 600;
+  align-items: center; justify-content: center;
+  flex-direction: column; text-align: center;
+  padding: 32px;
+}
+.success-page.open { display: flex; }
+.success-page-icon { font-size: 72px; margin-bottom: 20px; animation: bounce .6s ease; }
+@keyframes bounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+.success-page-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 38px; font-weight: 700;
+  color: var(--brown-d); margin-bottom: 10px;
+}
+.success-page-sub { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 400px; margin-bottom: 28px; }
+.success-page-items {
+  background: var(--white); border: 1px solid var(--beige);
+  border-radius: var(--radius-lg); padding: 16px 24px;
+  margin-bottom: 24px; width: 100%; max-width: 380px; text-align: left;
+}
+.success-page-item { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; color: var(--dark); border-bottom: 1px solid var(--cream2); }
+.success-page-item:last-child { border-bottom: none; font-weight: 700; color: var(--brown-d); }
+.success-page-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 380px; }
+.success-back-btn {
+  background: var(--brown-d); color: var(--cream);
+  border: none; font-weight: 700; font-size: 14px;
+  padding: 13px; border-radius: var(--radius);
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+}
+.success-wa-btn {
+  background: #25D366; color: #fff;
+  border: none; font-weight: 700; font-size: 14px;
+  padding: 13px; border-radius: var(--radius);
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
 </style>
 </head>
 <body>
@@ -1253,9 +1358,12 @@ footer ul li:hover { color: var(--cream); }
         <div class="logo-sub">Hongo Vital</div>
       </div>
     </a>
-    <div class="search-bar">
-      <input type="text" placeholder="Buscar hongos medicinales, beneficios..." id="searchInput">
-      <button class="search-btn" onclick="handleSearch()">🔍 Buscar</button>
+    <div class="search-wrap">
+      <div class="search-bar">
+        <input type="text" placeholder="Buscar hongos medicinales, beneficios..." id="searchInput" autocomplete="off" oninput="mostrarSugerencias(this.value)" onkeydown="if(event.key==='Enter')handleSearch();if(event.key==='Escape')cerrarSugerencias()">
+        <button class="search-btn" onclick="handleSearch()">🔍 Buscar</button>
+      </div>
+      <div class="search-suggestions" id="searchSugg"></div>
     </div>
     <div class="header-actions">
       <button class="btn-login" id="btnLogin" onclick="abrirLogin()">Mi cuenta</button>
@@ -1293,9 +1401,9 @@ footer ul li:hover { color: var(--cream); }
         <button class="btn-outline" onclick="document.getElementById('cats').scrollIntoView({behavior:'smooth'})">Conocé los hongos</button>
       </div>
       <div class="hero-stats">
-        <div class="hero-stat"><strong>100%</strong><span>Natural</span></div>
-        <div class="hero-stat"><strong>8</strong><span>Variedades</span></div>
-        <div class="hero-stat"><strong>AR 🇦🇷</strong><span>Hecho aquí</span></div>
+        <div class="hero-stat"><strong data-target="100" data-suffix="%">100%</strong><span>Natural</span></div>
+        <div class="hero-stat"><strong data-target="8">8</strong><span>Variedades</span></div>
+        <div class="hero-stat"><strong data-target="500" data-suffix="+">500+</strong><span>Clientes felices</span></div>
       </div>
     </div>
     <div class="hero-visual">
@@ -1408,7 +1516,16 @@ footer ul li:hover { color: var(--cream); }
       <button class="sort-btn active" onclick="sortProducts('todos')">Ver todos</button>
     </div>
   </div>
-  <div class="section-sub" id="prodsCount" style="margin-bottom:22px;">Cargando productos...</div>
+  <div class="section-sub" id="prodsCount" style="margin-bottom:14px;">Cargando productos...</div>
+  <div class="benefit-filters" id="benefitFilters" style="display:none;">
+    <button class="ben-tag active" onclick="filtrarBeneficio('',this)">Todos</button>
+    <button class="ben-tag" onclick="filtrarBeneficio('Energía',this)">⚡ Energía</button>
+    <button class="ben-tag" onclick="filtrarBeneficio('Descanso',this)">🌙 Descanso</button>
+    <button class="ben-tag" onclick="filtrarBeneficio('Inmunidad',this)">🛡️ Inmunidad</button>
+    <button class="ben-tag" onclick="filtrarBeneficio('Enfoque',this)">🧠 Enfoque</button>
+    <button class="ben-tag" onclick="filtrarBeneficio('Equilibrio',this)">☯️ Equilibrio</button>
+    <button class="ben-tag" onclick="filtrarBeneficio('Piel',this)">💧 Piel</button>
+  </div>
   <div class="products-grid" id="productsGrid"></div>
 </div>
 
@@ -1802,6 +1919,9 @@ async function loadProductsFromAPI() {
     renderProducts(PRODUCTS);
     updateCart();
     document.getElementById('prodsCount').textContent = PRODUCTS.length + ' productos disponibles';
+    document.getElementById('benefitFilters').style.display = 'flex';
+    // Guardar carrito al modificar
+    const _origUpdateCart = updateCart;
   } catch (err) {
     document.getElementById('prodsCount').textContent = '⚠️ Error al cargar productos.';
   }
@@ -1887,6 +2007,7 @@ function updateCart() {
   document.getElementById('cartTotal').textContent = '$' + total.toLocaleString('es-AR');
   const btnVaciar = document.getElementById('btnVaciar');
   if (btnVaciar) btnVaciar.style.display = cart.length > 0 ? 'block' : 'none';
+  saveCart();
   document.getElementById('cartItems').innerHTML = cart.length === 0
     ? `<p style="color:var(--muted);text-align:center;margin-top:40px;font-size:14px;">Tu carrito está vacío 🍄</p>`
     : cart.map(x => `
@@ -1955,6 +2076,9 @@ function sortProducts(by) {
     sorted = [...PRODUCTS];
     document.getElementById('prodsTitle').textContent = 'Todos los productos';
     document.getElementById('prodsCount').textContent = PRODUCTS.length + ' productos disponibles';
+    document.getElementById('benefitFilters').style.display = 'flex';
+    // Guardar carrito al modificar
+    const _origUpdateCart = updateCart;
   }
   renderProducts(sorted);
 }
@@ -2002,6 +2126,9 @@ function abrirModalProducto(id) {
           ${p.stock_qty && p.stock_qty <= 5 ? `<div class="stock-low" style="margin-top:6px;">Quedan ${p.stock_qty} unidades</div>` : ''}
         </div>
         <button class="prod-modal-btn" onclick="addToCart(${p.id}, this);cerrarModalProducto()">+ Agregar al carrito</button>
+        <button class="share-btn" onclick="compartirProducto('${p.name}','${p.benefit}')">
+          <img src="img/whatsapp.png" style="width:18px;height:18px;"> Compartir por WhatsApp
+        </button>
       </div>
     </div>`;
   document.getElementById('prodModalBg').classList.add('open');
@@ -2138,6 +2265,8 @@ async function confirmarPedido() {
       });
       const data = await res.json();
       if (!res.ok || !data.id) throw new Error(data.error || 'Error al crear la preferencia');
+      // Guardar carrito para mostrar en éxito
+      localStorage.setItem('af_last_order', JSON.stringify(cart));
       window.location.href = `https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=${data.id}`;
       return;
     } catch (err) {
@@ -2148,6 +2277,112 @@ async function confirmarPedido() {
     }
   }
 }
+
+// ── CARRITO PERSISTENTE ───────────────────────────────────────────────────────
+function saveCart() {
+  try { localStorage.setItem('af_cart', JSON.stringify(cart)); } catch(e) {}
+}
+function loadCart() {
+  try {
+    const saved = localStorage.getItem('af_cart');
+    if (saved) { cart = JSON.parse(saved); updateCart(); }
+  } catch(e) {}
+}
+
+// ── PÁGINA DE ÉXITO POST-PAGO ─────────────────────────────────────────────────
+function checkSuccessPage() {
+  const params = new URLSearchParams(window.location.search);
+  const status = params.get('status') || params.get('collection_status');
+  if (status === 'approved') {
+    const lastOrder = JSON.parse(localStorage.getItem('af_last_order') || '[]');
+    const total = lastOrder.reduce((s,x) => s + x.price * x.qty, 0);
+    const itemsHtml = lastOrder.map(x =>
+      `<div class="success-page-item"><span>${x.name} ×${x.qty}</span><span>$${(x.price*x.qty).toLocaleString('es-AR')}</span></div>`
+    ).join('') + `<div class="success-page-item"><span>Total</span><span>$${total.toLocaleString('es-AR')}</span></div>`;
+    document.getElementById('successItems').innerHTML = itemsHtml || '<div class="success-page-item"><span>Pedido confirmado</span></div>';
+    const waMsg = encodeURIComponent('¡Hola Alma Fungi! Acabo de realizar una compra y quiero enviar el comprobante 🍄');
+    document.getElementById('successWaBtn').onclick = () => window.open('https://wa.me/5492954502770?text=' + waMsg, '_blank');
+    document.getElementById('successPage').classList.add('open');
+    // Limpiar carrito después de compra exitosa
+    cart = [];
+    localStorage.removeItem('af_cart');
+    localStorage.removeItem('af_last_order');
+    updateCart();
+  }
+}
+
+// ── SUGERENCIAS DE BÚSQUEDA ───────────────────────────────────────────────────
+function mostrarSugerencias(q) {
+  const box = document.getElementById('searchSugg');
+  if (!q.trim() || PRODUCTS.length === 0) { box.classList.remove('open'); return; }
+  const matches = PRODUCTS.filter(p =>
+    p.name.toLowerCase().includes(q.toLowerCase()) ||
+    p.benefit.toLowerCase().includes(q.toLowerCase()) ||
+    (p.tags||[]).some(t => t.toLowerCase().includes(q.toLowerCase()))
+  ).slice(0, 5);
+  if (!matches.length) { box.classList.remove('open'); return; }
+  box.innerHTML = matches.map(p => `
+    <div class="sug-item" onclick="abrirModalProducto(${p.id});cerrarSugerencias()">
+      <img src="${p.image||'img/fungi.jpg'}" onerror="this.src='img/fungi.jpg'">
+      <div><div class="sug-item-name">${p.name}</div><div class="sug-item-ben">${p.benefit}</div></div>
+    </div>`).join('');
+  box.classList.add('open');
+}
+function cerrarSugerencias() {
+  setTimeout(() => document.getElementById('searchSugg').classList.remove('open'), 150);
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-wrap')) cerrarSugerencias();
+});
+
+// ── FILTROS POR BENEFICIO ─────────────────────────────────────────────────────
+function filtrarBeneficio(ben, btn) {
+  document.querySelectorAll('.ben-tag').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = ben
+    ? PRODUCTS.filter(p => (p.tags||[]).some(t => t.toLowerCase().includes(ben.toLowerCase())) || p.benefit.includes(ben))
+    : PRODUCTS;
+  currentProducts = filtered;
+  renderProducts(filtered);
+  document.getElementById('prodsCount').textContent = filtered.length + ' productos';
+}
+
+// ── COMPARTIR POR WHATSAPP ────────────────────────────────────────────────────
+function compartirProducto(nombre, beneficio) {
+  const msg = encodeURIComponent(`¡Mirá este producto de Alma Fungi! 🍄\n*${nombre}*\n${beneficio}\n\nVer en: https://almafungi2.web.app`);
+  window.open('https://wa.me/?text=' + msg, '_blank');
+}
+
+// ── VOLVER ARRIBA ─────────────────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('backTop');
+  if (btn) btn.classList.toggle('visible', window.scrollY > 400);
+});
+
+// ── CONTADOR ANIMADO HERO ─────────────────────────────────────────────────────
+function animateCounters() {
+  document.querySelectorAll('.hero-stat strong[data-target]').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    let current = 0;
+    const step = Math.ceil(target / 40);
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = current + suffix;
+      if (current >= target) clearInterval(timer);
+    }, 30);
+  });
+}
+// Animar cuando el hero es visible
+const heroObs = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) { animateCounters(); heroObs.disconnect(); }
+}, { threshold: .3 });
+const heroEl = document.querySelector('.hero-stats');
+if (heroEl) heroObs.observe(heroEl);
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+loadCart();
+checkSuccessPage();
 </script>
 
 <script type="module">
@@ -2222,5 +2457,23 @@ async function confirmarPedido() {
     }
   });
 </script>
+
+<!-- PÁGINA ÉXITO POST-PAGO -->
+<div class="success-page" id="successPage">
+  <div class="success-page-icon">🎉</div>
+  <div class="success-page-title">¡Gracias por tu compra!</div>
+  <div class="success-page-sub">Tu pedido fue recibido con éxito. Te contactaremos a la brevedad para coordinar el envío. ¡Gracias por elegir Alma Fungi! 🍄</div>
+  <div class="success-page-items" id="successItems"></div>
+  <div class="success-page-btns">
+    <button class="success-wa-btn" id="successWaBtn">
+      <img src="img/whatsapp.png" style="width:20px;height:20px;"> Enviar comprobante por WhatsApp
+    </button>
+    <button class="success-back-btn" onclick="document.getElementById('successPage').classList.remove('open');window.history.replaceState({},document.title,window.location.pathname);">Volver a la tienda</button>
+  </div>
+</div>
+
+<!-- VOLVER ARRIBA -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Volver arriba">↑</button>
+
 </body>
 </html>
