@@ -2366,13 +2366,16 @@ function filtrarBeneficio(ben, btn) {
 
 // ── COMPARTIR POR WHATSAPP ────────────────────────────────────────────────────
 function compartirProducto(id, nombre, beneficio) {
-  const url = `https://almafungi2.web.app?producto=${id}`;
-  const msg = encodeURIComponent(`¡Mirá este producto de Alma Fungi! 🍄
-*${nombre}*
-${beneficio}
-
-👉 ${url}`);
-  window.open('https://wa.me/?text=' + msg, '_blank');
+  const url = 'https://almafungi2.web.app?producto=' + id;
+  const texto = [
+    'Alma Fungi - Hongo Vital',
+    '',
+    nombre,
+    beneficio,
+    '',
+    url
+  ].join('%0A');
+  window.open('https://wa.me/?text=' + texto, '_blank');
 }
 
 // ── VOLVER ARRIBA ─────────────────────────────────────────────────────────────
