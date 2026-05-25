@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "almafungi2"
+  },
+  "targets": {
+    "almafungi2": {
+      "hosting": {
+        "almafungi": [
+          "almafungi"
+        ],
+        "almafungi2": [
+          "almafungi2"
+        ]
+      }
+    }
   }
 }
