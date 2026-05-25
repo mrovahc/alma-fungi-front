@@ -10,7 +10,6 @@
       ]
     },
     {
-      "target": "almafungi2",
       "public": ".",
       "ignore": [
         "firebase.json",
