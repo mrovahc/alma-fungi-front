@@ -1343,6 +1343,35 @@ footer ul li:hover { color: var(--cream); }
   cursor: pointer; font-family: 'DM Sans', sans-serif;
   display: flex; align-items: center; justify-content: center; gap: 8px;
 }
+
+/* ── OPCIONES DE ENVÍO ── */
+.envio-methods { display: flex; flex-direction: column; gap: 9px; margin: 14px 0; }
+.envio-btn {
+  display: flex; align-items: center; gap: 13px;
+  border: 1.5px solid var(--beige); border-radius: 12px;
+  padding: 13px 16px; cursor: pointer; background: var(--white);
+  transition: border-color .18s, box-shadow .18s;
+  font-family: 'DM Sans', sans-serif;
+}
+.envio-btn:hover { border-color: var(--brown-l); }
+.envio-btn.selected { border-color: var(--brown-d); box-shadow: 0 0 0 2px rgba(92,61,34,.1); }
+.envio-icon { font-size: 22px; flex-shrink: 0; }
+.envio-name { font-size: 13.5px; font-weight: 700; color: var(--brown-d); }
+.envio-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.envio-price {
+  margin-left: auto; font-family: 'Cormorant Garamond', serif;
+  font-size: 16px; font-weight: 700; color: var(--brown-d);
+  flex-shrink: 0;
+}
+.envio-radio {
+  width: 17px; height: 17px; border-radius: 50%;
+  border: 2px solid var(--beige); flex-shrink: 0;
+  background: var(--cream); display: flex;
+  align-items: center; justify-content: center;
+}
+.envio-btn.selected .envio-radio { border-color: var(--brown-d); background: var(--brown-d); }
+.envio-btn.selected .envio-radio::after { content:''; width:6px; height:6px; border-radius:50%; background:#fff; }
+.envio-loading { text-align:center; color:var(--muted); font-size:13px; padding:16px 0; }
 </style>
 </head>
 <body>
@@ -1762,9 +1791,10 @@ footer ul li:hover { color: var(--cream); }
     <button class="modal-close" onclick="cerrarCheckout()">✕</button>
     <div class="checkout-steps">
       <div class="step-tab done" id="stepTab1">✓ Cuenta</div>
-      <div class="step-tab active" id="stepTab2">2. Envío</div>
-      <div class="step-tab" id="stepTab3">3. Pago</div>
-      <div class="step-tab" id="stepTab4">4. Confirmar</div>
+      <div class="step-tab active" id="stepTab2">2. Datos</div>
+      <div class="step-tab" id="stepTab3">3. Envío</div>
+      <div class="step-tab" id="stepTab4">4. Pago</div>
+      <div class="step-tab" id="stepTab5">5. Confirmar</div>
     </div>
 
     <!-- STEP 2: ENVÍO -->
@@ -1809,10 +1839,23 @@ footer ul li:hover { color: var(--cream); }
         <label>Email de contacto</label>
         <input type="email" id="envEmail" placeholder="tucorreo@email.com">
       </div>
-      <button class="btn-next" onclick="irAPago()">Siguiente: Método de pago →</button>
+      <button class="btn-next" onclick="irAEnvio()">Siguiente: Forma de envío →</button>
     </div>
 
-    <!-- STEP 3: PAGO -->
+    <!-- STEP 3: FORMA DE ENVÍO -->
+    <div id="stepFormaEnvio" style="display:none;">
+      <div class="modal-title">¿Cómo lo recibís?</div>
+      <div class="modal-sub">Elegí la opción que mejor te quede</div>
+      <div class="envio-methods" id="envioMethods">
+        <div class="envio-loading">Cargando opciones de envío...</div>
+      </div>
+      <div style="display:flex;align-items:center;margin-top:8px;">
+        <button class="btn-back" onclick="volverADatos()">← Volver</button>
+        <button class="btn-next" style="flex:1" onclick="irAPago()">Siguiente: Método de pago →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: PAGO -->
     <div id="stepPago" style="display:none;">
       <div class="modal-title">¿Cómo pagás?</div>
       <div class="modal-sub">Todos los métodos son seguros y encriptados 🔒</div>
@@ -1834,7 +1877,7 @@ footer ul li:hover { color: var(--cream); }
         🔒 100% seguro y encriptado
       </div>
       <div style="display:flex;align-items:center;">
-        <button class="btn-back" onclick="volverAEnvio()">← Volver</button>
+        <button class="btn-back" onclick="volverAFormaEnvio()">← Volver</button>
         <button class="btn-next" style="flex:1" onclick="irAConfirmar()">Revisar pedido →</button>
       </div>
     </div>
@@ -1846,11 +1889,13 @@ footer ul li:hover { color: var(--cream); }
       <div class="order-summary">
         <div class="order-summary-title">🛒 Productos</div>
         <div id="confirmItems"></div>
-        <div class="order-total"><span>Total</span><span id="confirmTotal"></span></div>
+        <div class="order-line" id="confirmEnvioLinea" style="display:none;"><span id="confirmEnvioNombre"></span><span id="confirmEnvioCosto"></span></div>
+        <div class="order-total"><span>Total con envío</span><span id="confirmTotal"></span></div>
       </div>
       <div class="order-summary" id="confirmEnvioBox">
         <div class="order-summary-title">📦 Datos de envío</div>
         <div id="confirmEnvio" style="font-size:13px;color:var(--muted);line-height:1.8;"></div>
+        <div id="confirmFormaEnvio" style="font-size:13px;font-weight:700;color:var(--brown-d);margin-top:6px;"></div>
       </div>
       <div class="order-summary" id="confirmPagoBox">
         <div class="order-summary-title">💳 Método de pago</div>
@@ -2216,36 +2261,80 @@ function abrirCheckout() {
 function cerrarCheckout() { document.getElementById('checkoutModal').classList.remove('open'); }
 
 function mostrarPaso(id) {
-  ['stepEnvio','stepPago','stepConfirmar','stepExito'].forEach(s => {
+  ['stepEnvio','stepFormaEnvio','stepPago','stepConfirmar','stepExito'].forEach(s => {
     document.getElementById(s).style.display = s === id ? 'block' : 'none';
   });
 }
 function setStep(n) {
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= 5; i++) {
     const t = document.getElementById('stepTab' + i);
+    if (!t) continue;
     t.className = 'step-tab';
     if (i < n) t.classList.add('done');
     else if (i === n) t.classList.add('active');
   }
 }
 
-function irAPago() {
+// Variables de envío
+let envioPrecios = { cadete: 2000, correo: 4000, andreani: 5000, whatsapp: 0 };
+let envioElegido = null;
+
+async function cargarPreciosEnvio() {
+  try {
+    const res = await fetch('https://alma-fungi-backend.onrender.com/api/settings/envio');
+    envioPrecios = await res.json();
+  } catch(e) {}
+}
+
+function irAEnvio() {
   const nombre = document.getElementById('envNombre').value.trim();
   const dir = document.getElementById('envDireccion').value.trim();
   const ciudad = document.getElementById('envCiudad').value.trim();
   if (!nombre || !dir || !ciudad) { alert('Completá al menos nombre, dirección y ciudad'); return; }
-  // Guardar datos para autocompletar la próxima vez
   try {
     localStorage.setItem('af_shipping', JSON.stringify({
-      direccion: dir,
-      ciudad:    ciudad,
-      provincia: document.getElementById('envProvincia').value,
-      cp:        document.getElementById('envCP').value,
-      tel:       document.getElementById('envTel').value
+      direccion: dir, ciudad, provincia: document.getElementById('envProvincia').value,
+      cp: document.getElementById('envCP').value, tel: document.getElementById('envTel').value
     }));
   } catch(e) {}
-  mostrarPaso('stepPago'); setStep(3);
+  renderOpcionesEnvio();
+  mostrarPaso('stepFormaEnvio'); setStep(3);
 }
+
+function renderOpcionesEnvio() {
+  const ciudad = document.getElementById('envCiudad').value.toLowerCase();
+  const esSantaRosa = ciudad.includes('santa rosa') || ciudad.includes('santarosa');
+  const box = document.getElementById('envioMethods');
+  const opciones = [
+    ...(esSantaRosa ? [{ key:'cadete', icon:'🛵', nombre:'Cadete local', desc:'Entrega en Santa Rosa, La Pampa', precio: envioPrecios.cadete }] : []),
+    { key:'correo', icon:'📮', nombre:'Correo Argentino', desc:'Envío a todo el país · 3-7 días hábiles', precio: envioPrecios.correo },
+    { key:'andreani', icon:'📦', nombre:'Andreani', desc:'Envío a todo el país · 2-5 días hábiles', precio: envioPrecios.andreani },
+    { key:'whatsapp', icon:'💬', nombre:'A coordinar por WhatsApp', desc:'Te contactamos para acordar el envío', precio: 0 },
+  ];
+  box.innerHTML = opciones.map(op => `
+    <div class="envio-btn ${envioElegido?.key === op.key ? 'selected' : ''}" onclick="elegirEnvio('${op.key}','${op.nombre}',${op.precio})">
+      <div class="envio-icon">${op.icon}</div>
+      <div style="flex:1;">
+        <div class="envio-name">${op.nombre}</div>
+        <div class="envio-desc">${op.desc}</div>
+      </div>
+      <div class="envio-price">${op.precio > 0 ? '$' + op.precio.toLocaleString('es-AR') : 'Gratis'}</div>
+      <div class="envio-radio"></div>
+    </div>`).join('');
+}
+
+function elegirEnvio(key, nombre, precio) {
+  envioElegido = { key, nombre, precio };
+  renderOpcionesEnvio();
+}
+
+function irAPago() {
+  if (!envioElegido) { alert('Elegí una forma de envío'); return; }
+  mostrarPaso('stepPago'); setStep(4);
+}
+
+function volverADatos() { mostrarPaso('stepEnvio'); setStep(2); }
+function volverAFormaEnvio() { mostrarPaso('stepFormaEnvio'); setStep(3); }
 function volverAEnvio() { mostrarPaso('stepEnvio'); setStep(2); }
 
 function selectMethod(m) {
@@ -2256,10 +2345,24 @@ function selectMethod(m) {
 
 function irAConfirmar() {
   if (!payMethod) { alert('Seleccioná un método de pago'); return; }
-  const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+  const subtotal = cart.reduce((s, x) => s + x.price * x.qty, 0);
+  const costoEnvio = envioElegido?.precio || 0;
+  const total = subtotal + costoEnvio;
+
   document.getElementById('confirmItems').innerHTML = cart.map(x =>
     `<div class="order-line"><span>${x.name} ×${x.qty}</span><span>$${(x.price*x.qty).toLocaleString('es-AR')}</span></div>`
   ).join('');
+
+  // Mostrar línea de envío
+  const envioLinea = document.getElementById('confirmEnvioLinea');
+  if (costoEnvio > 0) {
+    document.getElementById('confirmEnvioNombre').textContent = envioElegido.nombre;
+    document.getElementById('confirmEnvioCosto').textContent = '$' + costoEnvio.toLocaleString('es-AR');
+    envioLinea.style.display = 'flex';
+  } else {
+    envioLinea.style.display = 'none';
+  }
+
   document.getElementById('confirmTotal').textContent = '$' + total.toLocaleString('es-AR');
   const nombre = `${document.getElementById('envNombre').value} ${document.getElementById('envApellido').value}`.trim();
   const dir = document.getElementById('envDireccion').value;
@@ -2267,25 +2370,36 @@ function irAConfirmar() {
   const prov = document.getElementById('envProvincia').value;
   const cp = document.getElementById('envCP').value;
   const tel = document.getElementById('envTel').value;
-  document.getElementById('confirmEnvio').innerHTML = `${nombre}<br>${dir}<br>${ciudad}${prov ? ', '+prov : ''}${cp ? ' ('+cp+')' : ''}<br>📞 ${tel}`;
+  document.getElementById('confirmEnvio').innerHTML = `${nombre}<br>${dir}<br>${ciudad}${prov?', '+prov:''}${cp?' ('+cp+')':''}<br>📞 ${tel}`;
+  document.getElementById('confirmFormaEnvio').textContent = '🚚 ' + (envioElegido?.nombre || '') + (costoEnvio > 0 ? ' — $' + costoEnvio.toLocaleString('es-AR') : ' — Gratis');
   document.getElementById('confirmPago').textContent = '💳 Mercado Pago · Visa, Master, AMEX, efectivo y más';
-  mostrarPaso('stepConfirmar'); setStep(4);
+  mostrarPaso('stepConfirmar'); setStep(5);
 }
-function volverAPago() { mostrarPaso('stepPago'); setStep(3); }
+function volverAPago() { mostrarPaso('stepPago'); setStep(4); }
 
 async function confirmarPedido() {
   if (payMethod === 'mp') {
     const btn = document.querySelector('#stepConfirmar .btn-next');
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Procesando...'; }
     try {
-      const items = cart.map(x => ({
-        id:          String(x.id),
-        title:       x.name,
-        name:        x.name,
-        description: x.benefit || '',
-        quantity:    x.qty,
-        price:       x.price
-      }));
+      const costoEnvio = envioElegido?.precio || 0;
+      const items = [
+        ...cart.map(x => ({
+          id:          String(x.id),
+          title:       x.name,
+          name:        x.name,
+          description: x.benefit || '',
+          quantity:    x.qty,
+          price:       x.price
+        })),
+        ...(costoEnvio > 0 ? [{
+          id: 'envio',
+          title: 'Envío — ' + (envioElegido?.nombre || ''),
+          name:  'Envío — ' + (envioElegido?.nombre || ''),
+          quantity: 1,
+          price: costoEnvio
+        }] : [])
+      ];
       const BACKEND = 'https://alma-fungi-backend.onrender.com';
 
       // Datos del comprador para guardar el pedido
@@ -2302,7 +2416,9 @@ async function confirmarPedido() {
           cp:        document.getElementById('envCP').value,
         },
         productos: cart.map(x => ({ id: x.id, nombre: x.name, cantidad: x.qty, precio: x.price })),
-        total:     cart.reduce((s,x) => s+x.price*x.qty, 0),
+        total:     cart.reduce((s,x) => s+x.price*x.qty, 0) + (envioElegido?.precio || 0),
+        forma_envio: envioElegido?.nombre || '',
+        costo_envio: envioElegido?.precio || 0,
         metodo_pago: 'Mercado Pago',
         estado: 'pendiente'
       };
@@ -2463,6 +2579,7 @@ if (heroEl) heroObs.observe(heroEl);
 // ── INIT ──────────────────────────────────────────────────────────────────────
 loadCart();
 checkSuccessPage();
+cargarPreciosEnvio();
 </script>
 
 <script type="module">
