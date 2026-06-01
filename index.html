@@ -1805,6 +1805,10 @@ footer ul li:hover { color: var(--cream); }
           <input type="tel" id="envTel" placeholder="2954 000000">
         </div>
       </div>
+      <div class="form-group">
+        <label>Email de contacto</label>
+        <input type="email" id="envEmail" placeholder="tucorreo@email.com">
+      </div>
       <button class="btn-next" onclick="irAPago()">Siguiente: Método de pago →</button>
     </div>
 
@@ -2190,7 +2194,20 @@ function abrirCheckout() {
   if (document.getElementById('methodMP')) document.getElementById('methodMP').classList.add('selected');
   if (currentUser) {
     document.getElementById('checkoutUserSub').textContent = `Hola, ${currentUser.name.split(' ')[0]} 👋`;
-    document.getElementById('envNombre').value = currentUser.name.split(' ')[0] || '';
+    // Autocompletar con datos de Google/Firebase
+    const partes = (currentUser.name || '').split(' ');
+    document.getElementById('envNombre').value = partes[0] || '';
+    document.getElementById('envApellido').value = partes.slice(1).join(' ') || '';
+    if (currentUser.email) document.getElementById('envEmail').value = currentUser.email;
+    // Cargar datos guardados previamente si existen
+    try {
+      const saved = JSON.parse(localStorage.getItem('af_shipping') || '{}');
+      if (saved.direccion) document.getElementById('envDireccion').value = saved.direccion;
+      if (saved.ciudad)    document.getElementById('envCiudad').value    = saved.ciudad;
+      if (saved.provincia) document.getElementById('envProvincia').value = saved.provincia;
+      if (saved.cp)        document.getElementById('envCP').value        = saved.cp;
+      if (saved.tel)       document.getElementById('envTel').value       = saved.tel;
+    } catch(e) {}
   }
   mostrarPaso('stepEnvio');
   setStep(2);
@@ -2217,6 +2234,16 @@ function irAPago() {
   const dir = document.getElementById('envDireccion').value.trim();
   const ciudad = document.getElementById('envCiudad').value.trim();
   if (!nombre || !dir || !ciudad) { alert('Completá al menos nombre, dirección y ciudad'); return; }
+  // Guardar datos para autocompletar la próxima vez
+  try {
+    localStorage.setItem('af_shipping', JSON.stringify({
+      direccion: dir,
+      ciudad:    ciudad,
+      provincia: document.getElementById('envProvincia').value,
+      cp:        document.getElementById('envCP').value,
+      tel:       document.getElementById('envTel').value
+    }));
+  } catch(e) {}
   mostrarPaso('stepPago'); setStep(3);
 }
 function volverAEnvio() { mostrarPaso('stepEnvio'); setStep(2); }
@@ -2260,6 +2287,33 @@ async function confirmarPedido() {
         price:       x.price
       }));
       const BACKEND = 'https://alma-fungi-backend.onrender.com';
+
+      // Datos del comprador para guardar el pedido
+      const pedidoData = {
+        cliente: {
+          nombre:   `${document.getElementById('envNombre').value} ${document.getElementById('envApellido').value}`.trim(),
+          email:    document.getElementById('envEmail')?.value || currentUser?.email || '',
+          telefono: document.getElementById('envTel').value,
+        },
+        envio: {
+          direccion: document.getElementById('envDireccion').value,
+          ciudad:    document.getElementById('envCiudad').value,
+          provincia: document.getElementById('envProvincia').value,
+          cp:        document.getElementById('envCP').value,
+        },
+        productos: cart.map(x => ({ id: x.id, nombre: x.name, cantidad: x.qty, precio: x.price })),
+        total:     cart.reduce((s,x) => s+x.price*x.qty, 0),
+        metodo_pago: 'Mercado Pago',
+        estado: 'pendiente'
+      };
+
+      // Guardar pedido en MongoDB
+      fetch(`${BACKEND}/api/pedidos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(pedidoData)
+      }).catch(() => {}); // No bloquear si falla
+
       const res = await fetch(`${BACKEND}/api/create_preference`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -2269,6 +2323,7 @@ async function confirmarPedido() {
       if (!res.ok || !data.id) throw new Error(data.error || 'Error al crear la preferencia');
       // Guardar carrito para mostrar en éxito
       localStorage.setItem('af_last_order', JSON.stringify(cart));
+      localStorage.setItem('af_last_shipping', JSON.stringify(pedidoData.cliente));
       window.location.href = `https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=${data.id}`;
       return;
     } catch (err) {
