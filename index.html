@@ -1475,6 +1475,38 @@ footer ul li:hover { color: var(--cream); }
   .como-grid::before { display: none; }
   .como-step { padding: 22px 16px; }
 }
+
+/* ── CUPÓN ── */
+.cupon-wrap {
+  background: var(--cream2); border-radius: 11px;
+  padding: 14px 16px; margin-bottom: 14px;
+}
+.cupon-label { font-size: 10.5px; font-weight: 700; color: var(--brown-d); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 8px; }
+.cupon-row { display: flex; gap: 8px; }
+.cupon-input {
+  flex: 1; border: 1.5px solid var(--beige); border-radius: 8px;
+  padding: 9px 12px; font-size: 14px; font-family: 'DM Sans', sans-serif;
+  color: var(--dark); background: var(--cream); outline: none;
+  transition: border-color .15s; text-transform: uppercase; letter-spacing: 1px;
+}
+.cupon-input:focus { border-color: var(--brown-l); }
+.cupon-btn {
+  background: var(--brown-d); color: var(--cream);
+  border: none; border-radius: 8px; padding: 9px 16px;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; transition: background .2s; white-space: nowrap;
+}
+.cupon-btn:hover { background: var(--brown); }
+.cupon-msg { font-size: 12px; margin-top: 7px; font-weight: 600; }
+.cupon-msg.ok { color: var(--green); }
+.cupon-msg.err { color: var(--rust); }
+.cupon-aplicado {
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(74,94,58,.1); border: 1px solid var(--green);
+  border-radius: 8px; padding: 8px 12px; margin-top: 8px;
+  font-size: 13px; font-weight: 700; color: var(--green);
+}
+.cupon-quitar { background: none; border: none; color: var(--rust); cursor: pointer; font-size: 16px; line-height: 1; }
 </style>
 </head>
 <body>
@@ -2095,7 +2127,21 @@ footer ul li:hover { color: var(--cream); }
         <div class="order-summary-title">🛒 Productos</div>
         <div id="confirmItems"></div>
         <div class="order-line" id="confirmEnvioLinea" style="display:none;"><span id="confirmEnvioNombre"></span><span id="confirmEnvioCosto"></span></div>
-        <div class="order-total"><span>Total con envío</span><span id="confirmTotal"></span></div>
+        <div class="order-line" id="confirmDescuentoLinea" style="display:none;color:var(--green);font-weight:700;"><span id="confirmDescuentoNombre"></span><span id="confirmDescuentoMonto"></span></div>
+        <div class="order-total"><span>Total</span><span id="confirmTotal"></span></div>
+      </div>
+      <!-- CUPÓN -->
+      <div class="cupon-wrap">
+        <div class="cupon-label">🏷️ ¿Tenés un cupón de descuento?</div>
+        <div class="cupon-row">
+          <input class="cupon-input" id="cuponInput" type="text" placeholder="Ej: BIENVENIDO10" maxlength="20">
+          <button class="cupon-btn" onclick="aplicarCupon()">Aplicar</button>
+        </div>
+        <div class="cupon-msg" id="cuponMsg"></div>
+        <div class="cupon-aplicado" id="cuponAplicado" style="display:none;">
+          <span id="cuponAplicadoTxt"></span>
+          <button class="cupon-quitar" onclick="quitarCupon()" title="Quitar cupón">✕</button>
+        </div>
       </div>
       <div class="order-summary" id="confirmEnvioBox">
         <div class="order-summary-title">📦 Datos de envío</div>
@@ -2148,6 +2194,7 @@ let cart = [];
 let currentProducts = [];
 let currentUser = null;
 let payMethod = null;
+let cuponData = null; // { codigo, tipo, valor, descuento }
 
 async function loadProductsFromAPI() {
   try {
@@ -2440,6 +2487,7 @@ function iniciarCheckout() {
 function abrirCheckout() {
   cerrarCart();
   payMethod = 'mp';
+  cuponData = null;
   document.querySelectorAll('.pay-method-btn').forEach(b => b.classList.remove('selected'));
   if (document.getElementById('methodMP')) document.getElementById('methodMP').classList.add('selected');
   if (currentUser) {
@@ -2548,6 +2596,59 @@ function selectMethod(m) {
   document.getElementById('methodMP').classList.add('selected');
 }
 
+async function aplicarCupon() {
+  const codigo = document.getElementById('cuponInput').value.trim().toUpperCase();
+  const msgEl = document.getElementById('cuponMsg');
+  if (!codigo) { msgEl.textContent = 'Ingresá un código'; msgEl.className = 'cupon-msg err'; return; }
+  msgEl.textContent = 'Verificando...'; msgEl.className = 'cupon-msg';
+  try {
+    const subtotal = cart.reduce((s,x) => s+x.price*x.qty, 0) + (envioElegido?.precio || 0);
+    const res = await fetch('https://alma-fungi-backend.onrender.com/api/cupones/validar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ codigo, total: subtotal })
+    });
+    const data = await res.json();
+    if (!res.ok) { msgEl.textContent = data.error; msgEl.className = 'cupon-msg err'; return; }
+    cuponData = data;
+    msgEl.textContent = '';
+    document.getElementById('cuponAplicadoTxt').textContent =
+      `✓ ${data.cupon} — ${data.tipo === 'porcentaje' ? data.valor + '% OFF' : '$' + data.valor.toLocaleString('es-AR') + ' OFF'}`;
+    document.getElementById('cuponAplicado').style.display = 'flex';
+    document.getElementById('cuponInput').style.display = 'none';
+    document.querySelector('.cupon-btn').style.display = 'none';
+    actualizarTotalConCupon();
+  } catch(e) { msgEl.textContent = 'Error al verificar el cupón'; msgEl.className = 'cupon-msg err'; }
+}
+
+function quitarCupon() {
+  cuponData = null;
+  document.getElementById('cuponAplicado').style.display = 'none';
+  document.getElementById('cuponInput').style.display = '';
+  document.getElementById('cuponInput').value = '';
+  document.querySelector('.cupon-btn').style.display = '';
+  document.getElementById('cuponMsg').textContent = '';
+  document.getElementById('confirmDescuentoLinea').style.display = 'none';
+  actualizarTotalConCupon();
+}
+
+function actualizarTotalConCupon() {
+  const subtotal = cart.reduce((s,x) => s+x.price*x.qty, 0);
+  const costoEnvio = envioElegido?.precio || 0;
+  const descuento = cuponData?.descuento || 0;
+  const total = Math.max(0, subtotal + costoEnvio - descuento);
+  // Mostrar línea de descuento
+  const descLine = document.getElementById('confirmDescuentoLinea');
+  if (descuento > 0) {
+    document.getElementById('confirmDescuentoNombre').textContent = '🏷️ Cupón ' + cuponData.cupon;
+    document.getElementById('confirmDescuentoMonto').textContent = '-$' + descuento.toLocaleString('es-AR');
+    descLine.style.display = 'flex';
+  } else {
+    descLine.style.display = 'none';
+  }
+  document.getElementById('confirmTotal').textContent = '$' + total.toLocaleString('es-AR');
+}
+
 function irAConfirmar() {
   if (!payMethod) { alert('Seleccioná un método de pago'); return; }
   const subtotal = cart.reduce((s, x) => s + x.price * x.qty, 0);
@@ -2568,7 +2669,16 @@ function irAConfirmar() {
     envioLinea.style.display = 'none';
   }
 
-  document.getElementById('confirmTotal').textContent = '$' + total.toLocaleString('es-AR');
+  // Aplicar descuento si hay cupón
+  const descuento = cuponData?.descuento || 0;
+  const totalFinal = Math.max(0, total - descuento);
+  const descLine = document.getElementById('confirmDescuentoLinea');
+  if (descuento > 0) {
+    document.getElementById('confirmDescuentoNombre').textContent = '🏷️ Cupón ' + cuponData.cupon;
+    document.getElementById('confirmDescuentoMonto').textContent = '-$' + descuento.toLocaleString('es-AR');
+    descLine.style.display = 'flex';
+  } else { descLine.style.display = 'none'; }
+  document.getElementById('confirmTotal').textContent = '$' + totalFinal.toLocaleString('es-AR');
   const nombre = `${document.getElementById('envNombre').value} ${document.getElementById('envApellido').value}`.trim();
   const dir = document.getElementById('envDireccion').value;
   const ciudad = document.getElementById('envCiudad').value;
@@ -2588,6 +2698,7 @@ async function confirmarPedido() {
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Procesando...'; }
     try {
       const costoEnvio = envioElegido?.precio || 0;
+      const descuento = cuponData?.descuento || 0;
       const items = [
         ...cart.map(x => ({
           id:          String(x.id),
@@ -2598,11 +2709,12 @@ async function confirmarPedido() {
           price:       x.price
         })),
         ...(costoEnvio > 0 ? [{
-          id: 'envio',
-          title: 'Envío — ' + (envioElegido?.nombre || ''),
-          name:  'Envío — ' + (envioElegido?.nombre || ''),
-          quantity: 1,
-          price: costoEnvio
+          id: 'envio', title: 'Envío — ' + (envioElegido?.nombre || ''),
+          name: 'Envío — ' + (envioElegido?.nombre || ''), quantity: 1, price: costoEnvio
+        }] : []),
+        ...(descuento > 0 ? [{
+          id: 'descuento', title: 'Descuento cupón ' + (cuponData?.cupon || ''),
+          name: 'Descuento', quantity: 1, price: -descuento
         }] : [])
       ];
       const BACKEND = 'https://alma-fungi-backend.onrender.com';
@@ -2621,9 +2733,11 @@ async function confirmarPedido() {
           cp:        document.getElementById('envCP').value,
         },
         productos: cart.map(x => ({ id: x.id, nombre: x.name, cantidad: x.qty, precio: x.price })),
-        total:     cart.reduce((s,x) => s+x.price*x.qty, 0) + (envioElegido?.precio || 0),
+        total:     Math.max(0, cart.reduce((s,x) => s+x.price*x.qty, 0) + (envioElegido?.precio || 0) - (cuponData?.descuento || 0)),
         forma_envio: envioElegido?.nombre || '',
         costo_envio: envioElegido?.precio || 0,
+        cupon: cuponData?.cupon || null,
+        descuento: cuponData?.descuento || 0,
         metodo_pago: 'Mercado Pago',
         estado: 'pendiente'
       };
@@ -2633,7 +2747,11 @@ async function confirmarPedido() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(pedidoData)
-      }).catch(() => {}); // No bloquear si falla
+      }).catch(() => {});
+      // Registrar uso del cupón
+      if (cuponData?.cupon) {
+        fetch(`${BACKEND}/api/cupones/${cuponData.cupon}/usar`, { method: 'PATCH' }).catch(() => {});
+      }
 
       const res = await fetch(`${BACKEND}/api/create_preference`, {
         method: 'POST',
