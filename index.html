@@ -1372,6 +1372,109 @@ footer ul li:hover { color: var(--cream); }
 .envio-btn.selected .envio-radio { border-color: var(--brown-d); background: var(--brown-d); }
 .envio-btn.selected .envio-radio::after { content:''; width:6px; height:6px; border-radius:50%; background:#fff; }
 .envio-loading { text-align:center; color:var(--muted); font-size:13px; padding:16px 0; }
+
+/* ── ANIMACIONES SCROLL ── */
+.fade-in {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-in-left {
+  opacity: 0;
+  transform: translateX(-28px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.fade-in-left.visible { opacity: 1; transform: translateX(0); }
+.fade-in-right {
+  opacity: 0;
+  transform: translateX(28px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.fade-in-right.visible { opacity: 1; transform: translateX(0); }
+.fade-delay-1 { transition-delay: .1s; }
+.fade-delay-2 { transition-delay: .2s; }
+.fade-delay-3 { transition-delay: .3s; }
+.fade-delay-4 { transition-delay: .4s; }
+
+/* ── CÓMO FUNCIONA ── */
+.como-wrap { background: var(--white); border-top: 1px solid rgba(201,180,154,.3); border-bottom: 1px solid rgba(201,180,154,.3); }
+.como-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  position: relative;
+}
+.como-grid::before {
+  content: '';
+  position: absolute;
+  top: 44px; left: calc(16.66% + 20px); right: calc(16.66% + 20px);
+  height: 2px;
+  background: linear-gradient(to right, var(--beige), var(--gold), var(--beige));
+  z-index: 0;
+}
+.como-step {
+  text-align: center;
+  padding: 32px 24px;
+  position: relative;
+  z-index: 1;
+}
+.como-num {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: var(--brown-d);
+  color: var(--cream);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 4px 16px rgba(92,61,34,.3);
+  position: relative; z-index: 2;
+}
+.como-icon { font-size: 28px; margin-bottom: 10px; }
+.como-title { font-size: 15px; font-weight: 700; color: var(--brown-d); margin-bottom: 6px; }
+.como-desc { font-size: 12.5px; color: var(--muted); line-height: 1.65; }
+
+/* ── FAQ ── */
+.faq-wrap { background: var(--cream2); }
+.faq-list { display: flex; flex-direction: column; gap: 10px; }
+.faq-item {
+  background: var(--white);
+  border: 1px solid rgba(201,180,154,.4);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color .2s;
+}
+.faq-item.open { border-color: var(--brown-l); }
+.faq-q {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 22px; cursor: pointer;
+  font-size: 14px; font-weight: 700; color: var(--brown-d);
+  gap: 12px; user-select: none;
+}
+.faq-q:hover { background: var(--cream2); }
+.faq-arrow {
+  font-size: 18px; color: var(--brown);
+  transition: transform .25s; flex-shrink: 0;
+  font-style: normal;
+}
+.faq-item.open .faq-arrow { transform: rotate(45deg); }
+.faq-a {
+  max-height: 0; overflow: hidden;
+  transition: max-height .35s ease, padding .25s;
+  font-size: 13.5px; color: var(--muted);
+  line-height: 1.75; padding: 0 22px;
+}
+.faq-item.open .faq-a { max-height: 200px; padding: 0 22px 18px; }
+
+@media (max-width: 600px) {
+  .como-grid { grid-template-columns: 1fr; }
+  .como-grid::before { display: none; }
+  .como-step { padding: 22px 16px; }
+}
 </style>
 </head>
 <body>
@@ -1465,19 +1568,19 @@ footer ul li:hover { color: var(--cream); }
 <!-- TRUST BAR -->
 <div class="trust-bar">
   <div class="trust-inner">
-    <div class="trust-item">
+    <div class="trust-item fade-in">
       <div class="trust-icon">🌿</div>
       <div><div class="trust-label">100% Natural</div><div class="trust-sub">Sin aditivos artificiales</div></div>
     </div>
-    <div class="trust-item">
+    <div class="trust-item fade-in">
       <div class="trust-icon">💊</div>
       <div><div class="trust-label">Cápsulas vegetales</div><div class="trust-sub">Apto veganos</div></div>
     </div>
-    <div class="trust-item">
+    <div class="trust-item fade-in">
       <div class="trust-icon">🇦🇷</div>
       <div><div class="trust-label">Hecho en Argentina</div><div class="trust-sub">Inspirado en nuestra tierra</div></div>
     </div>
-    <div class="trust-item">
+    <div class="trust-item fade-in">
       <div class="trust-icon">📦</div>
       <div><div class="trust-label">Envío a todo el país</div><div class="trust-sub">Consultá por tu zona</div></div>
     </div>
@@ -1493,37 +1596,37 @@ footer ul li:hover { color: var(--cream); }
     <div class="section-sub">Cada suplemento tiene un objetivo específico para tu cuerpo y mente</div>
   </div>
   <div class="cats-grid">
-    <div class="cat-card" onclick="filterByCategory('Reishi')">
+    <div class="cat-card fade-in" onclick="filterByCategory('Reishi')">
       <img class="cat-img" src="img/reishihongo.png" alt="Reishi">
       <div class="cat-name">Reishi</div>
       <div class="cat-benefit">Equilibrio · Descanso · Bienestar</div>
     </div>
-    <div class="cat-card" onclick="filterByCategory('Cordyceps')">
+    <div class="cat-card fade-in" onclick="filterByCategory('Cordyceps')">
       <img class="cat-img" src="img/cordyceptshongo.png" alt="Cordyceps">
       <div class="cat-name">Cordyceps</div>
       <div class="cat-benefit">Energía · Resistencia · Vitalidad</div>
     </div>
-    <div class="cat-card" onclick="filterByCategory('Melena de León')">
+    <div class="cat-card fade-in" onclick="filterByCategory('Melena de León')">
       <img class="cat-img" src="img/melenadeleonhongo.png" alt="Melena de León">
       <div class="cat-name">Melena de León</div>
       <div class="cat-benefit">Enfoque · Memoria · Claridad</div>
     </div>
-    <div class="cat-card" onclick="filterByCategory('Tremella')">
+    <div class="cat-card fade-in" onclick="filterByCategory('Tremella')">
       <img class="cat-img" src="img/tremellahongo.png" alt="Tremella">
       <div class="cat-name">Tremella</div>
       <div class="cat-benefit">Hidratación · Piel · Inmunidad</div>
     </div>
-    <div class="cat-card" onclick="filterByCategory('Ashwagandha')">
+    <div class="cat-card fade-in" onclick="filterByCategory('Ashwagandha')">
       <img class="cat-img" src="img/ashwagandhahongo.png" alt="Ashwagandha">
       <div class="cat-name">Ashwagandha</div>
       <div class="cat-benefit">Equilibrio · Calma · Descanso</div>
     </div>
-    <div class="cat-card" onclick="filterByCategory('Cola de Pavo')">
+    <div class="cat-card fade-in" onclick="filterByCategory('Cola de Pavo')">
       <img class="cat-img" src="img/coladepavohongo.png" alt="Cola de Pavo">
       <div class="cat-name">Cola de Pavo</div>
       <div class="cat-benefit">Inmunidad · Respiración · Vitalidad</div>
     </div>
-    <div class="cat-card" onclick="filterByCategory('Suplementos')">
+    <div class="cat-card fade-in" onclick="filterByCategory('Suplementos')">
       <img class="cat-img" src="img/suplementoshongos.jpg" alt="Suplementos">
       <div class="cat-name">Suplementos</div>
       <div class="cat-benefit">Energía · Antioxidantes · Bienestar</div>
@@ -1587,42 +1690,42 @@ footer ul li:hover { color: var(--cream); }
       <div class="section-divider"></div>
     </div>
     <div class="porq-grid">
-      <div class="porq-item">
+      <div class="porq-item fade-in">
         <div class="porq-icon">🌿</div>
         <div class="porq-title">Sin TACC</div>
         <div class="porq-desc">Libre de gluten, apto celíacos y personas con sensibilidad al trigo</div>
       </div>
-      <div class="porq-item">
+      <div class="porq-item fade-in">
         <div class="porq-icon">🌱</div>
         <div class="porq-title">100% Vegano</div>
         <div class="porq-desc">Cápsulas vegetales sin ingredientes de origen animal</div>
       </div>
-      <div class="porq-item">
+      <div class="porq-item fade-in">
         <div class="porq-icon">🥛</div>
         <div class="porq-title">Sin Lactosa</div>
         <div class="porq-desc">Sin derivados lácteos, apto para intolerantes a la lactosa</div>
       </div>
-      <div class="porq-item">
+      <div class="porq-item fade-in">
         <div class="porq-icon">⚡</div>
         <div class="porq-title">Apto Keto</div>
         <div class="porq-desc">Sin azúcares ni carbohidratos añadidos, compatible con dieta cetogénica</div>
       </div>
-      <div class="porq-item">
+      <div class="porq-item fade-in">
         <div class="porq-icon">🔬</div>
         <div class="porq-title">Extracto Puro</div>
         <div class="porq-desc">Concentrado de alta potencia, sin rellenos ni aditivos artificiales</div>
       </div>
-      <div class="porq-item">
+      <div class="porq-item fade-in">
         <div class="porq-icon">🇦🇷</div>
         <div class="porq-title">Hecho en Argentina</div>
         <div class="porq-desc">Inspirado en nuestra tierra. Frescura garantizada</div>
       </div>
-      <div class="porq-item">
+      <div class="porq-item fade-in">
         <div class="porq-icon">📦</div>
         <div class="porq-title">Envío a todo el país</div>
         <div class="porq-desc">Despachamos a cualquier provincia de Argentina</div>
       </div>
-      <div class="porq-item">
+      <div class="porq-item fade-in">
         <div class="porq-icon">💬</div>
         <div class="porq-title">Asesoramiento</div>
         <div class="porq-desc">Te ayudamos a elegir el suplemento ideal para tus objetivos</div>
@@ -1641,7 +1744,7 @@ footer ul li:hover { color: var(--cream); }
       <div class="section-sub">Más de 500 clientes ya experimentaron los beneficios de Alma Fungi</div>
     </div>
     <div class="test-grid">
-      <div class="test-card">
+      <div class="test-card fade-in">
         <div class="test-stars">★★★★★</div>
         <div class="test-txt">"Empecé con el Reishi hace 2 meses y noto una diferencia enorme en mi calidad de sueño. Me levanto descansada y sin esa sensación de cansancio acumulado. Lo recomiendo a todos."</div>
         <div class="test-author">
@@ -1652,7 +1755,7 @@ footer ul li:hover { color: var(--cream); }
           </div>
         </div>
       </div>
-      <div class="test-card">
+      <div class="test-card fade-in">
         <div class="test-stars">★★★★★</div>
         <div class="test-txt">"El Cordyceps cambió mis entrenamientos. Tengo más resistencia y me recupero mucho más rápido. Llevo 3 meses tomándolo y no lo dejaría nunca. La calidad del producto es excelente."</div>
         <div class="test-author">
@@ -1663,7 +1766,7 @@ footer ul li:hover { color: var(--cream); }
           </div>
         </div>
       </div>
-      <div class="test-card">
+      <div class="test-card fade-in">
         <div class="test-stars">★★★★★</div>
         <div class="test-txt">"Con la Melena de León me concentro mucho mejor en el trabajo. Soy diseñadora y la claridad mental que me da es increíble. La atención y el envío fueron rapidísimos."</div>
         <div class="test-author">
@@ -1682,6 +1785,108 @@ footer ul li:hover { color: var(--cream); }
 <a class="wa-float" href="https://wa.me/5492954502770?text=Hola%20Alma%20Fungi%2C%20quiero%20consultar%20sobre%20sus%20productos%20🍄" target="_blank" rel="noopener" title="Consultar por WhatsApp">
   <img src="img/whatsapp.png" alt="WhatsApp">
 </a>
+
+<!-- CÓMO FUNCIONA -->
+<div class="como-wrap">
+  <div class="section fade-in">
+    <div class="section-header" style="text-align:center;max-width:520px;margin:0 auto 36px;">
+      <div class="section-label">Simple y natural</div>
+      <div class="section-title" style="text-align:center;">¿Cómo funciona?</div>
+      <div class="section-divider" style="margin:10px auto 8px;"></div>
+      <div class="section-sub" style="text-align:center;">Empezar tu rutina de hongos medicinales es muy fácil</div>
+    </div>
+    <div class="como-grid">
+      <div class="como-step fade-in fade-delay-1">
+        <div class="como-num">1</div>
+        <div class="como-icon">🔍</div>
+        <div class="como-title">Elegís tu hongo</div>
+        <div class="como-desc">Explorás el catálogo, leés los beneficios de cada suplemento y elegís el que mejor se adapta a tus objetivos.</div>
+      </div>
+      <div class="como-step fade-in fade-delay-2">
+        <div class="como-num">2</div>
+        <div class="como-icon">📦</div>
+        <div class="como-title">Lo recibís en casa</div>
+        <div class="como-desc">Pagás de forma segura por Mercado Pago y lo enviamos a todo el país. También podés coordinar el envío por WhatsApp.</div>
+      </div>
+      <div class="como-step fade-in fade-delay-3">
+        <div class="como-num">3</div>
+        <div class="como-icon">✨</div>
+        <div class="como-title">Notás los beneficios</div>
+        <div class="como-desc">Con uso constante empezás a notar los efectos en pocas semanas. Energía, foco, descanso o inmunidad según lo que hayas elegido.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="faq-wrap">
+  <div class="section fade-in">
+    <div class="section-header">
+      <div class="section-label">Dudas frecuentes</div>
+      <div class="section-title">Preguntas<br>frecuentes</div>
+      <div class="section-divider"></div>
+      <div class="section-sub">Todo lo que necesitás saber antes de empezar</div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item fade-in fade-delay-1">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          ¿Los suplementos son aptos para celíacos y veganos?
+          <i class="faq-arrow">+</i>
+        </div>
+        <div class="faq-a">Sí, todos nuestros productos son 100% Sin TACC, veganos, sin lactosa y aptos para dieta keto. Las cápsulas son de origen vegetal y no contienen ningún ingrediente de origen animal.</div>
+      </div>
+      <div class="faq-item fade-in fade-delay-2">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          ¿Cuánto tiempo tarda en notarse el efecto?
+          <i class="faq-arrow">+</i>
+        </div>
+        <div class="faq-a">Depende de cada persona y del suplemento. En general los primeros efectos se notan entre 2 y 4 semanas de uso constante. Para resultados óptimos recomendamos un ciclo mínimo de 3 meses.</div>
+      </div>
+      <div class="faq-item fade-in fade-delay-3">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          ¿Puedo tomar varios hongos al mismo tiempo?
+          <i class="faq-arrow">+</i>
+        </div>
+        <div class="faq-a">Sí, los hongos medicinales son adaptógenos y se pueden combinar perfectamente. De hecho, muchos de nuestros clientes arman stacks personalizados. La combinación más popular es Reishi + Cordyceps + Melena de León.</div>
+      </div>
+      <div class="faq-item fade-in fade-delay-4">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          ¿Cuánto tarda el envío?
+          <i class="faq-arrow">+</i>
+        </div>
+        <div class="faq-a">Para Santa Rosa y alrededores el cadete entrega el mismo día o al día siguiente. Por Correo Argentino o Andreani el tiempo es de 3 a 7 días hábiles según la provincia. Para más info podés consultarnos por WhatsApp.</div>
+      </div>
+      <div class="faq-item fade-in fade-delay-1">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          ¿Tienen alguna interacción con medicamentos?
+          <i class="faq-arrow">+</i>
+        </div>
+        <div class="faq-a">En general los hongos medicinales son seguros y bien tolerados. Sin embargo, si tomás medicación de base o tenés alguna condición de salud, te recomendamos consultar con tu médico antes de comenzar cualquier suplementación.</div>
+      </div>
+      <div class="faq-item fade-in fade-delay-2">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          ¿Cómo se toman las cápsulas?
+          <i class="faq-arrow">+</i>
+        </div>
+        <div class="faq-a">La dosis recomendada es de 1 a 2 cápsulas por día, preferentemente con el desayuno o almuerzo acompañadas de agua. Cada frasco trae 30 cápsulas vegetales de extracto puro.</div>
+      </div>
+      <div class="faq-item fade-in fade-delay-3">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          ¿Hacen envíos a todo el país?
+          <i class="faq-arrow">+</i>
+        </div>
+        <div class="faq-a">Sí, enviamos a toda Argentina. Podés elegir Correo Argentino o Andreani al momento de comprar, o coordinar el envío directamente por WhatsApp si preferís otra opción.</div>
+      </div>
+      <div class="faq-item fade-in fade-delay-4">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          ¿Qué pasa si no me llega o hay algún problema con el pedido?
+          <i class="faq-arrow">+</i>
+        </div>
+        <div class="faq-a">Ante cualquier inconveniente escribinos por WhatsApp al 2954502770 y lo resolvemos a la brevedad. Tu satisfacción es nuestra prioridad y trabajamos para que cada pedido llegue en perfectas condiciones.</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -2580,6 +2785,48 @@ if (heroEl) heroObs.observe(heroEl);
 loadCart();
 checkSuccessPage();
 cargarPreciosEnvio();
+
+// ── ANIMACIONES SCROLL ────────────────────────────────────────────────────────
+function initScrollAnimations() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right').forEach(el => {
+    observer.observe(el);
+  });
+}
+
+// Reiniciar observer cuando se cargan los productos
+const _origRender = renderProducts;
+renderProducts = function(list) {
+  _origRender(list);
+  setTimeout(() => {
+    document.querySelectorAll('.prod-card:not(.observed)').forEach(el => {
+      el.classList.add('fade-in', 'observed');
+    });
+    initScrollAnimations();
+  }, 50);
+};
+
+// ── FAQ ───────────────────────────────────────────────────────────────────────
+function toggleFaq(el) {
+  const item = el.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  // Cerrar todos
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  // Abrir el clickeado si estaba cerrado
+  if (!isOpen) item.classList.add('open');
+}
+
+// Iniciar animaciones al cargar
+document.addEventListener('DOMContentLoaded', initScrollAnimations);
+setTimeout(initScrollAnimations, 500);
 </script>
 
 <script type="module">
