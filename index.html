@@ -2318,7 +2318,7 @@ function renderOpcionesEnvio() {
         <div class="envio-name">${op.nombre}</div>
         <div class="envio-desc">${op.desc}</div>
       </div>
-      <div class="envio-price">${op.precio > 0 ? '$' + op.precio.toLocaleString('es-AR') : 'Gratis'}</div>
+      <div class="envio-price">${op.precio > 0 ? '$' + op.precio.toLocaleString('es-AR') : op.key === 'whatsapp' ? 'A coordinar' : 'Gratis'}</div>
       <div class="envio-radio"></div>
     </div>`).join('');
 }
