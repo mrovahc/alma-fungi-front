@@ -521,6 +521,14 @@ nav { background: var(--brown); }
   font-size: 9px; font-weight: 800;
   padding: 3px 9px; border-radius: 5px; z-index: 5;
 }
+.badge-bestseller {
+  position: absolute; top: 11px; left: 11px;
+  background: linear-gradient(135deg, var(--gold), #B8860B);
+  color: #fff; font-size: 9px; font-weight: 800;
+  padding: 3px 9px; border-radius: 5px; z-index: 5;
+  box-shadow: 0 2px 8px rgba(200,169,110,.5);
+  letter-spacing: .3px;
+}
 .prod-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
 .prod-brand {
   font-size: 9.5px;
@@ -2249,7 +2257,7 @@ function renderProducts(list) {
     <div class="prod-card" onclick="abrirModalProducto(${p.id})">
       <div class="prod-img">
         <img class="prod-real-bag" src="${p.image}" alt="${p.name}" onerror="this.src='img/fungi.jpg'">
-        ${disc ? `<div class="badge-oferta">-${disc}%</div>` : p.badge === 'nuevo' ? `<div class="badge-nuevo">NUEVO</div>` : `<div class="badge-natural">NATURAL</div>`}
+        ${disc ? `<div class="badge-oferta">-${disc}%</div>` : p.badge === 'nuevo' ? `<div class="badge-nuevo">NUEVO</div>` : p.badge === 'bestseller' ? `<div class="badge-bestseller">⭐ BEST SELLER</div>` : `<div class="badge-natural">NATURAL</div>`}
       </div>
       <div class="prod-body">
         <div class="prod-brand">Alma Fungi · Hongo Vital</div>
