@@ -2258,7 +2258,7 @@ function renderProducts(list) {
       <div class="prod-img">
         <img class="prod-real-bag" src="${p.image}" alt="${p.name}" onerror="this.src='img/fungi.jpg'">
         ${disc ? `<div class="badge-oferta">-${disc}%</div>` : p.badge === 'nuevo' ? `<div class="badge-nuevo">NUEVO</div>` : ''}
-        ${p.badge === 'bestseller' ? `<div class="badge-bestseller">⭐ BEST SELLER</div>` : p.badge !== 'oferta' && p.badge !== 'nuevo' && !disc ? `<div class="badge-natural">NATURAL</div>` : ''}
+        ${p.badge === 'bestseller' ? `<div class="badge-bestseller">⭐ BEST SELLER</div>` : p.badge === 'natural' ? `<div class="badge-natural">NATURAL</div>` : ''}
       </div>
       <div class="prod-body">
         <div class="prod-brand">Alma Fungi · Hongo Vital</div>
