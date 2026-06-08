@@ -522,7 +522,7 @@ nav { background: var(--brown); }
   padding: 3px 9px; border-radius: 5px; z-index: 5;
 }
 .badge-bestseller {
-  position: absolute; top: 11px; left: 11px;
+  position: absolute; top: 11px; right: 11px;
   background: linear-gradient(135deg, var(--gold), #B8860B);
   color: #fff; font-size: 9px; font-weight: 800;
   padding: 3px 9px; border-radius: 5px; z-index: 5;
@@ -2257,7 +2257,8 @@ function renderProducts(list) {
     <div class="prod-card" onclick="abrirModalProducto(${p.id})">
       <div class="prod-img">
         <img class="prod-real-bag" src="${p.image}" alt="${p.name}" onerror="this.src='img/fungi.jpg'">
-        ${disc ? `<div class="badge-oferta">-${disc}%</div>` : p.badge === 'nuevo' ? `<div class="badge-nuevo">NUEVO</div>` : p.badge === 'bestseller' ? `<div class="badge-bestseller">⭐ BEST SELLER</div>` : `<div class="badge-natural">NATURAL</div>`}
+        ${disc ? `<div class="badge-oferta">-${disc}%</div>` : p.badge === 'nuevo' ? `<div class="badge-nuevo">NUEVO</div>` : ''}
+        ${p.badge === 'bestseller' ? `<div class="badge-bestseller">⭐ BEST SELLER</div>` : p.badge !== 'oferta' && p.badge !== 'nuevo' && !disc ? `<div class="badge-natural">NATURAL</div>` : ''}
       </div>
       <div class="prod-body">
         <div class="prod-brand">Alma Fungi · Hongo Vital</div>
