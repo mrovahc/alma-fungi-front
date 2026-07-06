@@ -2289,10 +2289,10 @@ function renderProducts(list) {
           <div class="prod-cuotas">✓ 30 cápsulas vegetales</div>
           ${p.stock_qty && p.stock_qty <= 5 ? `<div class="stock-low">Quedan ${p.stock_qty} unidades</div>` : ''}
         </div>
-        ${p.tiene_polvo && p.gramajes?.length ? `
+        ${(p.tiene_polvo && p.gramajes?.length) || p.tiene_capsulas === false ? `
         <div class="presentacion-selector" onclick="event.stopPropagation()">
-          <button class="pres-btn selected" data-id="${p.id}" data-pres="capsulas" onclick="seleccionarPresentacion(${p.id},'capsulas',this)">Cápsulas (${p.capsules||30}u)</button>
-          ${p.gramajes.map(g => `<button class="pres-btn" data-id="${p.id}" data-pres="polvo-${g}g" onclick="seleccionarPresentacion(${p.id},'polvo-${g}g',this)">Polvo ${g}g</button>`).join('')}
+          ${p.tiene_capsulas !== false ? `<button class="pres-btn selected" data-id="${p.id}" data-pres="capsulas" onclick="seleccionarPresentacion(${p.id},'capsulas',this)">Cápsulas (${p.capsules||30}u)</button>` : ''}
+          ${p.tiene_polvo && p.gramajes?.length ? p.gramajes.map(g => `<button class="pres-btn${p.tiene_capsulas === false && p.gramajes[0] === g ? ' selected' : ''}" data-id="${p.id}" data-pres="polvo-${g}g" onclick="seleccionarPresentacion(${p.id},'polvo-${g}g',this)">Polvo ${g}g</button>`).join('') : ''}
         </div>` : ''}
         <button class="btn-add" onclick="event.stopPropagation();addToCart(${p.id}, this)">+ Agregar al carrito</button>
       </div>
@@ -2313,7 +2313,10 @@ function seleccionarPresentacion(id, pres, btn) {
 function addToCart(id, btnEl) {
   const p = PRODUCTS.find(x => x.id === id);
   if (!p) return;
-  const pres = presentacionSeleccionada[id] || 'capsulas';
+  const defaultPres = p.tiene_capsulas === false && p.tiene_polvo && p.gramajes?.length
+    ? `polvo-${p.gramajes[0]}g`
+    : 'capsulas';
+  const pres = presentacionSeleccionada[id] || defaultPres;
   const cartKey = `${id}_${pres}`;
   const existing = cart.find(x => x._cartKey === cartKey);
   if (existing) existing.qty++;
@@ -2479,10 +2482,10 @@ function abrirModalProducto(id) {
           <div class="prod-modal-caps">✓ 30 cápsulas vegetales · 100% Natural</div>
           ${p.stock_qty && p.stock_qty <= 5 ? `<div class="stock-low" style="margin-top:6px;">Quedan ${p.stock_qty} unidades</div>` : ''}
         </div>
-        ${p.tiene_polvo && p.gramajes?.length ? `
+        ${(p.tiene_polvo && p.gramajes?.length) || p.tiene_capsulas === false ? `
         <div class="presentacion-selector" style="margin-bottom:12px;">
-          <button class="pres-btn selected" data-id="${p.id}" data-pres="capsulas" onclick="seleccionarPresentacion(${p.id},'capsulas',this)">Cápsulas (${p.capsules||30}u)</button>
-          ${p.gramajes.map(g => `<button class="pres-btn" data-id="${p.id}" data-pres="polvo-${g}g" onclick="seleccionarPresentacion(${p.id},'polvo-${g}g',this)">Polvo ${g}g</button>`).join('')}
+          ${p.tiene_capsulas !== false ? `<button class="pres-btn selected" data-id="${p.id}" data-pres="capsulas" onclick="seleccionarPresentacion(${p.id},'capsulas',this)">Cápsulas (${p.capsules||30}u)</button>` : ''}
+          ${p.tiene_polvo && p.gramajes?.length ? p.gramajes.map(g => `<button class="pres-btn${p.tiene_capsulas === false && p.gramajes[0] === g ? ' selected' : ''}" data-id="${p.id}" data-pres="polvo-${g}g" onclick="seleccionarPresentacion(${p.id},'polvo-${g}g',this)">Polvo ${g}g</button>`).join('') : ''}
         </div>` : ''}
         <button class="prod-modal-btn" onclick="addToCart(${p.id}, this);cerrarModalProducto()">+ Agregar al carrito</button>
         <button class="share-btn" onclick="compartirProducto(${p.id},'${p.name}','${p.benefit}')">
