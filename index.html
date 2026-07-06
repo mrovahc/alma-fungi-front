@@ -2286,7 +2286,7 @@ function renderProducts(list) {
         <div class="prod-price">
           ${p.oldPrice ? `<div class="prod-price-old">$${p.oldPrice.toLocaleString('es-AR')}</div>` : ''}
           <div class="prod-price-main"><small>$</small>${p.price.toLocaleString('es-AR')}</div>
-          <div class="prod-cuotas">✓ 30 cápsulas vegetales</div>
+          ${p.tiene_capsulas !== false ? `<div class="prod-cuotas">✓ 30 cápsulas vegetales</div>` : ''}
           ${p.stock_qty && p.stock_qty <= 5 ? `<div class="stock-low">Quedan ${p.stock_qty} unidades</div>` : ''}
         </div>
         ${(p.tiene_polvo && p.gramajes?.length) || p.tiene_capsulas === false ? `
@@ -2462,7 +2462,7 @@ function abrirModalProducto(id) {
   if (!p) return;
   const disc = p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : null;
   const stars = '★'.repeat(p.rating) + '☆'.repeat(5 - p.rating);
-  const attrs = [...(p.tags || []), '30 Cápsulas', 'Sin TACC', 'Vegano'].slice(0, 5);
+  const attrs = [...(p.tags || []), ...(p.tiene_capsulas !== false ? ['30 Cápsulas'] : []), 'Sin TACC', 'Vegano'].slice(0, 5);
   document.getElementById('prodModal').innerHTML = `
     <div class="prod-modal-close" onclick="cerrarModalProducto()">✕</div>
     <div class="prod-modal-inner">
@@ -2479,7 +2479,7 @@ function abrirModalProducto(id) {
         <div class="prod-modal-price">
           ${disc ? `<div class="prod-modal-price-old">$${p.oldPrice.toLocaleString('es-AR')}</div>` : ''}
           <div class="prod-modal-price-main"><small>$</small>${p.price.toLocaleString('es-AR')}</div>
-          <div class="prod-modal-caps">✓ 30 cápsulas vegetales · 100% Natural</div>
+          ${p.tiene_capsulas !== false ? `<div class="prod-modal-caps">✓ 30 cápsulas vegetales · 100% Natural</div>` : ''}
           ${p.stock_qty && p.stock_qty <= 5 ? `<div class="stock-low" style="margin-top:6px;">Quedan ${p.stock_qty} unidades</div>` : ''}
         </div>
         ${(p.tiene_polvo && p.gramajes?.length) || p.tiene_capsulas === false ? `
